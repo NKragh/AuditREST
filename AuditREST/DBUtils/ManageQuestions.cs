@@ -7,13 +7,14 @@ using AuditREST.Models;
 
 namespace AuditREST.DBUtils
 {
-    public class ManageQuestions
+    public class ManageQuestions: IManager<Question>
     {
-        private string GET_ALL = "SELECT * FROM Questions WHERE ParentQuestionId IS NULL";
-        private string GET_ALL_IN_QUESTIONGROUP = "SELECT * FROM Questions WHERE QuestionGroupId = @Id AND ParentQuestionId IS NULL";
-        private string GET_ONE = "SELECT * FROM Questions WHERE QuestionId = @Id";
+        private string GET_ALL = "SELECT * FROM Questions";
+        private string GET_ALL_IN_QUESTIONGROUP = "SELECT * FROM Questions WHERE QuestionGroupId = @QuestionId";
+        private string GET_ONE = "SELECT * FROM Questions WHERE QuestionId = @QuestionId";
         private string INSERT = "INSERT INTO Questions (Text, Type, QuestionGroupId) VALUES (@Text, @Type, @QuestionGroupId)";
-        private string DELETE = "DELETE FROM Questions WHERE QuestionId = @Id";
+        private string DELETE = "DELETE FROM Questions WHERE QuestionId = @QuestionId";
+
         public string ConnectionString { get; set; }
 
         public ManageQuestions()
@@ -45,15 +46,12 @@ namespace AuditREST.DBUtils
         {
             Question question = new Question();
 
-            if (!reader.IsDBNull(0)) { question.Id = reader.GetInt32(0); }
+            if (!reader.IsDBNull(0)) { question.QuestionId = reader.GetInt32(0); }
             if (!reader.IsDBNull(1)) { question.Text = reader.GetString(1); }
-            if (!reader.IsDBNull(2)) { question.Type = reader.GetString(2); }
-            if (!reader.IsDBNull(4)) { question.QuestionGroupId = reader.GetInt32(4); }
+            if (!reader.IsDBNull(2)) { question.QuestionGroupId = reader.GetInt32(2); }
+            if (!reader.IsDBNull(3)) { question.AnswerType = new ManageAnswerTypes().Get(reader.GetInt32(3)); }
             
-            question.SubQuestions = new ManageSubQuestions().GetWithParentQuestionId(question.Id);
-
-            //SubQuestions
-            //if (!reader.IsDBNull(3)) { question. = reader.GetString(3); }
+            question.SubQuestions = new ManageSubQuestions().GetWithParentQuestionId(question.QuestionId);
 
             return question;
         }
@@ -67,7 +65,7 @@ namespace AuditREST.DBUtils
             {
                 conn.Open();
 
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@QuestionId", id);
 
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -89,7 +87,7 @@ namespace AuditREST.DBUtils
                 conn.Open();
 
                 cmd.Parameters.AddWithValue("@Text", question.Text);
-                cmd.Parameters.AddWithValue("@Type", question.Type);
+                cmd.Parameters.AddWithValue("@Type", question.AnswerType.AnswerTypeId);
                 cmd.Parameters.AddWithValue("@QuestionGroupId", question.QuestionGroupId);
 
                 //Returns true if query returns higher than 0 (affected rows)
@@ -103,7 +101,7 @@ namespace AuditREST.DBUtils
             using (SqlCommand cmd = new SqlCommand(DELETE, conn))
             {
                 conn.Open();
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@QuestionId", id);
                 return cmd.ExecuteNonQuery() > 0;
             }
         }
@@ -116,7 +114,7 @@ namespace AuditREST.DBUtils
             using (SqlCommand cmd = new SqlCommand(GET_ALL_IN_QUESTIONGROUP, conn))
             {
                 conn.Open();
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@QuestionId", id);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {

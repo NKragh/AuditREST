@@ -9,17 +9,17 @@ using Moq;
 using System.Configuration;
 using System.Data.SqlClient;
 
-namespace AuditRESTTest
+namespace AuditRESTTest.ManagerTests
 {
     [TestClass]
-    public class ManageQuestionsTest
+    public class ManageSubQuestionsTest
     {
-        private ManageQuestions manager;
+        private ManageSubQuestions manager;
 
         [TestInitialize]
         public void TestInit()
         {
-            manager = new ManageQuestions();
+            manager = new ManageSubQuestions();
         }
 
         //[TestCleanup]
@@ -36,8 +36,8 @@ namespace AuditRESTTest
         [TestMethod]
         public void CreateQuestionManager()
         {
-            ManageQuestions manager1 = new ManageQuestions();
-            Assert.IsInstanceOfType(manager1, typeof(ManageQuestions));
+            ManageSubQuestions manager1 = new ManageSubQuestions();
+            Assert.IsInstanceOfType(manager1, typeof(ManageSubQuestions));
         }
 
         [TestMethod]
@@ -50,45 +50,38 @@ namespace AuditRESTTest
         }
 
         [TestMethod]
-        public void GetQuestions()
+        public void GetSubQuestions()
         {
             var questions = manager.Get().ToList();
 
             Assert.AreNotEqual(0, questions.Count());
-            Assert.AreEqual(1, questions[0].Id);
         }
 
         [TestMethod]
-        public void GetOneQuestion()
+        public void GetOneSubQuestion()
         {
-            Question question = manager.Get(1);
+            SubQuestion question = manager.Get(1);
 
-            Assert.AreEqual(1, question.Id);
+            Assert.AreEqual(1, question.SubQuestionId);
         }
 
         [TestMethod]
-        public void GetQuestionThatDoesntExist()
+        public void GetSubQuestionThatDoesntExist()
         {
-            Question question = new Question("Test question", "Main", 1);
-            manager.Create(question);
-            List<Question> l = manager.Get().ToList();
-            Question temp = l[l.Count - 1];
-            manager.Delete(temp.Id);
-
-            Assert.IsNull(manager.Get(temp.Id));
+            Assert.IsNull(manager.Get(0));
         }
 
-        [TestMethod]
-        public void CreateQuestion()
-        {
-            Question question = new Question("Test question", "Main", 1);
+        //[TestMethod]
+        //public void CreateQuestion()
+        //{
+        //    Question question = new Question("Test question", "Main", 1);
 
-            Assert.IsTrue(manager.Create(question));
+        //    Assert.IsTrue(manager.Create(question));
 
-            var questions = manager.Get().ToList();
+        //    var questions = manager.Get().ToList();
 
-            Assert.AreEqual("Test question", questions.Find(q => q.Text == "Test question").Text);
-        }
+        //    Assert.AreEqual("Test question", questions.Find(q => q.Text == "Test question").Text);
+        //}
 
         //[TestMethod]
         //public void DeleteChecklist()
@@ -102,11 +95,11 @@ namespace AuditRESTTest
 
         //    Assert.AreEqual(tempChecklist.Name, checklist.Name);
 
-        //    bool response = manager.Delete(checklist.Id);
+        //    bool response = manager.Delete(checklist.QuestionId);
 
         //    Assert.IsTrue(response);
 
-        //    Assert.IsNull(manager.Get(checklist.Id));
+        //    Assert.IsNull(manager.Get(checklist.QuestionId));
         //}
 
         //[TestMethod]

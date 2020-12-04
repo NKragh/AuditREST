@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AuditREST;
 using AuditREST.Models;
 
-namespace AuditRESTTest
+namespace AuditRESTTest.ModelTests
 {
     [TestClass]
     public class CheckListTest

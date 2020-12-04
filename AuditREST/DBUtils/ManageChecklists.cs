@@ -12,8 +12,8 @@ namespace AuditREST.DBUtils
         private string GET_ALL = "SELECT * FROM Checklists";
         //private string GET_ALL = "SELECT q.*, qg.QuestionGroupTitle, qg.ChecklistId, c.Name\r\nFROM Questions as q\r\nJOIN QuestionGroups as qg ON qg.QuestionGroupId = q.QuestionGroupId\r\nJOIN Checklists as c ON c.ChecklistId = qg.ChecklistId";
         private string INSERT = "INSERT INTO Checklists (Name) VALUES (@Name)";
-        private string GET_ONE = "SELECT * FROM Checklists WHERE ChecklistId = @Id";
-        private string DELETE = "DELETE FROM Checklists WHERE ChecklistId = @Id";
+        private string GET_ONE = "SELECT * FROM Checklists WHERE ChecklistId = @QuestionId";
+        private string DELETE = "DELETE FROM Checklists WHERE ChecklistId = @QuestionId";
         private string UPDATE = "";
 
         public ManageChecklists()
@@ -61,7 +61,7 @@ namespace AuditREST.DBUtils
             {
                 conn.Open();
 
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@QuestionId", id);
 
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -98,7 +98,7 @@ namespace AuditREST.DBUtils
             using (SqlCommand cmd = new SqlCommand(DELETE, conn))
             {
                 conn.Open();
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@QuestionId", id);
                 int res = cmd.ExecuteNonQuery();
                 return res > 0;
             }
@@ -111,7 +111,7 @@ namespace AuditREST.DBUtils
             {
                 conn.Open();
 
-                cmd.Parameters.AddWithValue("@Id", updatedChecklist.Id);
+                cmd.Parameters.AddWithValue("@QuestionId", updatedChecklist.Id);
                 
 
                 return cmd.ExecuteNonQuery() > 0;

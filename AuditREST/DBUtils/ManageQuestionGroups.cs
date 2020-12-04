@@ -7,11 +7,11 @@ using AuditREST.Models;
 
 namespace AuditREST.DBUtils
 {
-    public class ManageQuestionGroups
+    public class ManageQuestionGroups: IManager<QuestionGroup>
     {
         private string GET_ALL = "SELECT * FROM QuestionGroups";
-        private string GET_ONE = "SELECT * FROM QuestionGroups WHERE QuestionGroupId = @Id";
-        private string GET_ALL_IN_CHECKLIST = "SELECT * FROM QuestionGroups WHERE ChecklistId = @Id";
+        private string GET_ONE = "SELECT * FROM QuestionGroups WHERE QuestionGroupId = @QuestionId";
+        private string GET_ALL_IN_CHECKLIST = "SELECT * FROM QuestionGroups WHERE ChecklistId = @ChecklistId";
         public string ConnectionString { get; set; }
 
         public ManageQuestionGroups()
@@ -64,7 +64,7 @@ namespace AuditREST.DBUtils
             {
                 conn.Open();
 
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@QuestionId", id);
 
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -78,6 +78,11 @@ namespace AuditREST.DBUtils
             return questionGroup;
         }
 
+        public bool Create(QuestionGroup input)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<QuestionGroup> GetInQuestionGroup(int id)
         {
             List<QuestionGroup> liste = new List<QuestionGroup>();
@@ -86,7 +91,7 @@ namespace AuditREST.DBUtils
             using (SqlCommand cmd = new SqlCommand(GET_ALL_IN_CHECKLIST, conn))
             {
                 conn.Open();
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@ChecklistId", id);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {

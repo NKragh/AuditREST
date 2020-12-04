@@ -9,7 +9,7 @@ using Moq;
 using System.Configuration;
 using System.Data.SqlClient;
 
-namespace AuditRESTTest
+namespace AuditRESTTest.ManagerTests
 {
     [TestClass]
     public class ManageChecklistsTest
@@ -106,11 +106,11 @@ namespace AuditRESTTest
 
         //    Assert.AreEqual(tempChecklist.Name, checklist.Name);
 
-        //    bool response = manager.Delete(checklist.Id);
+        //    bool response = manager.Delete(checklist.QuestionId);
 
         //    Assert.IsTrue(response);
 
-        //    Assert.IsNull(manager.Get(checklist.Id));
+        //    Assert.IsNull(manager.Get(checklist.QuestionId));
         //}
 
         //[TestMethod]

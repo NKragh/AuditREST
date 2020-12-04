@@ -4,7 +4,7 @@ using System.Text;
 using AuditREST.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AuditRESTTest
+namespace AuditRESTTest.ModelTests
 {
     [TestClass]
     public class QuestionGroupTest

@@ -4,54 +4,42 @@ using System.Collections.Generic;
 using System.Text;
 using AuditREST.Models;
 
-namespace AuditRESTTest
+namespace AuditRESTTest.ModelTests
 {
     [TestClass]
     public class QuestionTest
     {
         private Question q;
+        private AnswerType answerType;
 
         [TestInitialize]
         public void TestInit()
         {
             q = new Question();
+            answerType = new AnswerType("YesNo");
         }
         [TestMethod]
         public void CreateQuestion()
         {
-            Question q1 = new Question("Text", "Type", 1);
+            Question q1 = new Question("Text", answerType, 1);
             Assert.AreEqual("Text", q1.Text);
-            Assert.AreEqual("Type", q1.Type);
+            Assert.AreEqual(answerType, q1.AnswerType);
             Assert.AreEqual(1, q1.QuestionGroupId);
         }
 
         [TestMethod]
-        public void SetQuestionId()
+        public void QuestionProperties()
         {
-            q.Id = 1;
-
-            Assert.AreEqual(1, q.Id);
-        }
-
-        [TestMethod]
-        public void SetQuestionText()
-        {
+            q.QuestionId = 1;
             q.Text = "Test";
-            Assert.AreEqual("Test", q.Text);
-        }
-
-        [TestMethod]
-        public void SetQuestionType()
-        {
-            q.Type = "Test";
-            Assert.AreEqual("Test", q.Type);
-        }
-
-        [TestMethod]
-        public void SetQuestionQuestionGroupId()
-        {
+            q.AnswerType = answerType;
             q.QuestionGroupId = 1;
+
+            Assert.AreEqual(1, q.QuestionId);
+            Assert.AreEqual("Test", q.Text);
+            Assert.AreEqual(answerType, q.AnswerType);
             Assert.AreEqual(1, q.QuestionGroupId);
+
         }
 
         [TestMethod]
