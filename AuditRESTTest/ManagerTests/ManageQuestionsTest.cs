@@ -55,7 +55,6 @@ namespace AuditRESTTest.ManagerTests
             var questions = manager.Get().ToList();
 
             Assert.AreNotEqual(0, questions.Count());
-            //Assert.AreEqual(1, questions[0].QuestionId);
         }
 
         [TestMethod]
@@ -64,6 +63,15 @@ namespace AuditRESTTest.ManagerTests
             Question question = manager.Get(1);
 
             Assert.AreEqual(1, question.QuestionId);
+        }
+
+        [TestMethod]
+        public void GetSubQuestions()
+        {
+            Question question = new Question { QuestionId = 1 };
+            question.SubQuestions = manager.GetWithParentQuestionId(question.QuestionId);
+
+            Assert.AreNotEqual(0, question.SubQuestions.Count);
         }
 
         //[TestMethod]

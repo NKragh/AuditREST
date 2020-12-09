@@ -83,7 +83,7 @@ namespace AuditREST.DBUtils
             throw new NotImplementedException();
         }
 
-        public List<QuestionGroup> GetInQuestionGroup(int id)
+        public List<QuestionGroup> GetInChecklist(int id)
         {
             List<QuestionGroup> liste = new List<QuestionGroup>();
 
@@ -94,7 +94,7 @@ namespace AuditREST.DBUtils
                 cmd.Parameters.AddWithValue("@ChecklistId", id);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
-                {
+                { 
                     QuestionGroup item = ReadNextElement(reader);
                     liste.Add(item);
                 }

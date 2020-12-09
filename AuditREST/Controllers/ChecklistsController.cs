@@ -23,7 +23,7 @@ namespace AuditREST.Controllers
         }
 
         // GET: api/Checklists/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public Checklist Get(int id)
         {
             return manager.Get(id);

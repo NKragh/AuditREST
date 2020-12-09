@@ -9,22 +9,25 @@ namespace AuditREST.Models
     {
         public int QuestionId { get; set; }
         public string Text { get; set; }
+        public int? ParentId { get; set; }
         public AnswerType AnswerType { get; set; }
-        public int QuestionGroupId { get; set; }
-        public List<SubQuestion> SubQuestions { get; set; }
+        public int? QuestionGroupId { get; set; }
+        public List<Question> SubQuestions { get; set; }
+        public List<Trade> Trades { get; set; }
 
         public Question()
         {
         }
 
-        public Question(string text, AnswerType answerType, int questionGroupId)
+        public Question(string text, AnswerType answerType, int? questionGroupId, int? parentId)
         {
             Text = text;
             AnswerType = answerType;
             QuestionGroupId = questionGroupId;
+            ParentId = parentId;
         }
 
-        public int LoadSubQuestions(List<SubQuestion> listSubQuestions)
+        public int LoadSubQuestions(List<Question> listSubQuestions)
         {
             SubQuestions = listSubQuestions;
             return SubQuestions.Count;

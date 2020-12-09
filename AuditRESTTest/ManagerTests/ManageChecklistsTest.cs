@@ -22,18 +22,6 @@ namespace AuditRESTTest.ManagerTests
             manager = new ManageChecklists();
         }
 
-        //TODO: Skriv om det her i rapporten! Det er lækkert og virker hver gang. Der findes også [Class...] og [Assembly...]
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            using (SqlConnection conn = new SqlConnection(new ConnectionString().ConnectionStreng))
-            using (SqlCommand cmd = new SqlCommand("DELETE FROM Checklists WHERE Name = 'Test list'", conn))
-            {
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         [TestMethod]
         public void CreateChecklistManager()
         {
@@ -124,5 +112,16 @@ namespace AuditRESTTest.ManagerTests
         //    Checklist checklist = checklists.Find(c => c.Name == cl.Name);
         //    Assert.AreNotEqual(checklist.Name, cl.Name);
         //}
+        //TODO: Skriv om det her i rapporten! Det er lækkert og virker hver gang. Der findes også [Class...] og [Assembly...]
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            using (SqlConnection conn = new SqlConnection(new ConnectionString().ConnectionStreng))
+            using (SqlCommand cmd = new SqlCommand("DELETE FROM Checklists WHERE Name = 'Test list'", conn))
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

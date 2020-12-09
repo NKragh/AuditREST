@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using AuditREST.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AuditREST.DBUtils
 {
@@ -10,11 +12,7 @@ namespace AuditREST.DBUtils
         public string ConnectionString { get; set; }
 
         private string GET_ALL = "SELECT * FROM Checklists";
-        //private string GET_ALL = "SELECT q.*, qg.QuestionGroupTitle, qg.ChecklistId, c.Name\r\nFROM Questions as q\r\nJOIN QuestionGroups as qg ON qg.QuestionGroupId = q.QuestionGroupId\r\nJOIN Checklists as c ON c.ChecklistId = qg.ChecklistId";
-        private string INSERT = "INSERT INTO Checklists (Name) VALUES (@Name)";
-        private string GET_ONE = "SELECT * FROM Checklists WHERE ChecklistId = @QuestionId";
-        private string DELETE = "DELETE FROM Checklists WHERE ChecklistId = @QuestionId";
-        private string UPDATE = "";
+        private string GET_ONE = "SELECT * FROM Checklists WHERE ChecklistId = @ChecklistId";
 
         public ManageChecklists()
         {
@@ -42,13 +40,11 @@ namespace AuditREST.DBUtils
         private Checklist ReadNextElement(SqlDataReader reader)
         {
             Checklist cl = new Checklist();
-            QuestionGroup qg = new QuestionGroup();
 
             if (!reader.IsDBNull(0)) { cl.Id = reader.GetInt32(0); }
             if (!reader.IsDBNull(1)) { cl.Name = reader.GetString(1); }
             
-            cl.QuestionGroups = new ManageQuestionGroups().GetInQuestionGroup(cl.Id);
-            
+            cl.QuestionGroups = new ManageQuestionGroups().GetInChecklist(cl.Id);
 
             return cl;
         }
@@ -61,7 +57,7 @@ namespace AuditREST.DBUtils
             {
                 conn.Open();
 
-                cmd.Parameters.AddWithValue("@QuestionId", id);
+                cmd.Parameters.AddWithValue("@ChecklistId", id);
 
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -117,5 +113,10 @@ namespace AuditREST.DBUtils
                 return cmd.ExecuteNonQuery() > 0;
             }
         }
+
+        //private string GET_ALL = "SELECT q.*, qg.QuestionGroupTitle, qg.ChecklistId, c.Name\r\nFROM Questions as q\r\nJOIN QuestionGroups as qg ON qg.QuestionGroupId = q.QuestionGroupId\r\nJOIN Checklists as c ON c.ChecklistId = qg.ChecklistId";
+        private string INSERT = "INSERT INTO Checklists (Name) VALUES (@Name)";
+        private string DELETE = "DELETE FROM Checklists WHERE ChecklistId = @QuestionId";
+        private string UPDATE = "";
     }
 }

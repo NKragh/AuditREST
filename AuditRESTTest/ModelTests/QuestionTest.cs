@@ -21,10 +21,15 @@ namespace AuditRESTTest.ModelTests
         [TestMethod]
         public void CreateQuestion()
         {
-            Question q1 = new Question("Text", answerType, 1);
+            Question q1 = new Question("Text", answerType, 1, null);
             Assert.AreEqual("Text", q1.Text);
             Assert.AreEqual(answerType, q1.AnswerType);
-            Assert.AreEqual(1, q1.QuestionGroupId);
+            Assert.AreEqual(1, q1.QuestionGroupId, "QuestionGroup");
+
+            Question q2 = new Question("Text", answerType, null, 2);
+            Assert.AreEqual("Text", q2.Text);
+            Assert.AreEqual(answerType, q2.AnswerType);
+            Assert.AreEqual(2, q2.ParentId, "Parent");
         }
 
         [TestMethod]
@@ -34,21 +39,23 @@ namespace AuditRESTTest.ModelTests
             q.Text = "Test";
             q.AnswerType = answerType;
             q.QuestionGroupId = 1;
+            q.ParentId = 2;
 
             Assert.AreEqual(1, q.QuestionId);
             Assert.AreEqual("Test", q.Text);
             Assert.AreEqual(answerType, q.AnswerType);
             Assert.AreEqual(1, q.QuestionGroupId);
+            Assert.AreEqual(2, q.ParentId);
 
         }
 
         [TestMethod]
         public void LoadSubQuestions()
         {
-            List<SubQuestion> listSubQuestions = new List<SubQuestion>();
-            listSubQuestions.Add(new SubQuestion());
-            listSubQuestions.Add(new SubQuestion());
-            listSubQuestions.Add(new SubQuestion());
+            List<Question> listSubQuestions = new List<Question>();
+            listSubQuestions.Add(new Question());
+            listSubQuestions.Add(new Question());
+            listSubQuestions.Add(new Question());
 
             int count = q.LoadSubQuestions(listSubQuestions);
             Assert.AreEqual(3, count);

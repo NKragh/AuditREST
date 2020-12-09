@@ -7,11 +7,12 @@ using AuditREST.Models;
 
 namespace AuditREST.DBUtils
 {
-    public class ManageQuestions: IManager<Question>
+    public class ManageQuestions : IManager<Question>
     {
         private string GET_ALL = "SELECT * FROM Questions";
-        private string GET_ALL_IN_QUESTIONGROUP = "SELECT * FROM Questions WHERE QuestionGroupId = @QuestionId";
+        private string GET_ALL_IN_QUESTIONGROUP = "SELECT * FROM Questions WHERE QuestionGroupId = @QuestionGroupId";
         private string GET_ONE = "SELECT * FROM Questions WHERE QuestionId = @QuestionId";
+        private string GET_ALL_WITH_PARENT_ID = "SELECT * FROM Questions WHERE ParentQuestionId = @Id";
         private string INSERT = "INSERT INTO Questions (Text, Type, QuestionGroupId) VALUES (@Text, @Type, @QuestionGroupId)";
         private string DELETE = "DELETE FROM Questions WHERE QuestionId = @QuestionId";
 
@@ -20,6 +21,22 @@ namespace AuditREST.DBUtils
         public ManageQuestions()
         {
             ConnectionString = new ConnectionString().ConnectionStreng;
+        }
+
+        private Question ReadNextElement(SqlDataReader reader, Trade[] trades = null)
+        {
+            Question question = new Question();
+
+            if (!reader.IsDBNull(0)) { question.QuestionId = reader.GetInt32(0); }
+            if (!reader.IsDBNull(1)) { question.Text = reader.GetString(1); }
+            if (!reader.IsDBNull(2)) { question.QuestionGroupId = reader.GetInt32(2); }
+            if (!reader.IsDBNull(3)) { question.AnswerType = new ManageAnswerTypes().Get(reader.GetInt32(3)); }
+            if (!reader.IsDBNull(4)) { question.ParentId = reader.GetInt32(4); }
+
+            question.SubQuestions = new ManageQuestions().GetWithParentQuestionId(question.QuestionId);
+            question.Trades = new ManageTrades().GetOnQuestion(question);
+
+            return question;
         }
 
         public IEnumerable<Question> Get()
@@ -40,20 +57,6 @@ namespace AuditREST.DBUtils
             }
 
             return liste;
-        }
-
-        private Question ReadNextElement(SqlDataReader reader)
-        {
-            Question question = new Question();
-
-            if (!reader.IsDBNull(0)) { question.QuestionId = reader.GetInt32(0); }
-            if (!reader.IsDBNull(1)) { question.Text = reader.GetString(1); }
-            if (!reader.IsDBNull(2)) { question.QuestionGroupId = reader.GetInt32(2); }
-            if (!reader.IsDBNull(3)) { question.AnswerType = new ManageAnswerTypes().Get(reader.GetInt32(3)); }
-            
-            question.SubQuestions = new ManageSubQuestions().GetWithParentQuestionId(question.QuestionId);
-
-            return question;
         }
 
         public Question Get(int id)
@@ -77,6 +80,47 @@ namespace AuditREST.DBUtils
             }
 
             return question;
+        }
+        public List<Question> GetWithParentQuestionId(int questionId)
+        {
+            List<Question> liste = new List<Question>();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(GET_ALL_WITH_PARENT_ID, conn))
+            {
+                conn.Open();
+                cmd.Parameters.AddWithValue("@Id", questionId);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Question item = ReadNextElement(reader);
+                    liste.Add(item);
+                }
+                reader.Close();
+            }
+
+            return liste;
+        }
+
+        public List<Question> GetInQuestionGroup(int id)
+        {
+            List<Question> liste = new List<Question>();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(GET_ALL_IN_QUESTIONGROUP, conn))
+            {
+                conn.Open();
+                cmd.Parameters.AddWithValue("@QuestionGroupId", id);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Question item = ReadNextElement(reader);
+                    liste.Add(item);
+                }
+                reader.Close();
+            }
+
+            return liste;
         }
 
         public bool Create(Question question)
@@ -106,25 +150,5 @@ namespace AuditREST.DBUtils
             }
         }
 
-        public List<Question> GetInQuestionGroup(int id)
-        {
-            List<Question> liste = new List<Question>();
-
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            using (SqlCommand cmd = new SqlCommand(GET_ALL_IN_QUESTIONGROUP, conn))
-            {
-                conn.Open();
-                cmd.Parameters.AddWithValue("@QuestionId", id);
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    Question item = ReadNextElement(reader);
-                    liste.Add(item);
-                }
-                reader.Close();
-            }
-
-            return liste;
-        }
     }
 }
