@@ -9,7 +9,7 @@ namespace AuditREST.DBUtils
 {
     public class ManageChecklists : IManager<Checklist>
     {
-        public string ConnectionString { get; set; }
+        public override string ConnectionString { get; set; }
 
         private string GET_ALL = "SELECT * FROM Checklists";
         private string GET_ONE = "SELECT * FROM Checklists WHERE ChecklistId = @ChecklistId";
@@ -19,7 +19,7 @@ namespace AuditREST.DBUtils
             ConnectionString = new ConnectionString().ConnectionStreng;
         }
 
-        public IEnumerable<Checklist> Get()
+        public override IEnumerable<Checklist> Get()
         {
             List<Checklist> liste = new List<Checklist>();
             using (SqlConnection conn = new SqlConnection(ConnectionString))
@@ -37,7 +37,7 @@ namespace AuditREST.DBUtils
             return liste;
         }
 
-        private Checklist ReadNextElement(SqlDataReader reader)
+        public override Checklist ReadNextElement(SqlDataReader reader)
         {
             Checklist cl = new Checklist();
 
@@ -49,7 +49,7 @@ namespace AuditREST.DBUtils
             return cl;
         }
 
-        public Checklist Get(int id)
+        public override Checklist Get(int id)
         {
             Checklist checklist = null;
             using (SqlConnection conn = new SqlConnection(ConnectionString))

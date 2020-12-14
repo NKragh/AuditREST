@@ -16,14 +16,14 @@ namespace AuditREST.DBUtils
         private string INSERT = "INSERT INTO Questions (Text, Type, QuestionGroupId) VALUES (@Text, @Type, @QuestionGroupId)";
         private string DELETE = "DELETE FROM Questions WHERE QuestionId = @QuestionId";
 
-        public string ConnectionString { get; set; }
+        public override string ConnectionString { get; set; }
 
         public ManageQuestions()
         {
             ConnectionString = new ConnectionString().ConnectionStreng;
         }
 
-        private Question ReadNextElement(SqlDataReader reader, Trade[] trades = null)
+        public override Question ReadNextElement(SqlDataReader reader)
         {
             Question question = new Question();
 
@@ -33,13 +33,13 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(3)) { question.AnswerType = new ManageAnswerTypes().Get(reader.GetInt32(3)); }
             if (!reader.IsDBNull(4)) { question.ParentId = reader.GetInt32(4); }
 
-            question.SubQuestions = new ManageQuestions().GetWithParentQuestionId(question.QuestionId);
+            question.LoadSubQuestions(new ManageQuestions().GetWithParentQuestionId(question.QuestionId));
             question.Trades = new ManageTrades().GetOnQuestion(question);
 
             return question;
         }
 
-        public IEnumerable<Question> Get()
+        public override IEnumerable<Question> Get()
         {
             List<Question> liste = new List<Question>();
 
@@ -59,7 +59,7 @@ namespace AuditREST.DBUtils
             return liste;
         }
 
-        public Question Get(int id)
+        public override Question Get(int id)
         {
             Question question = null;
 

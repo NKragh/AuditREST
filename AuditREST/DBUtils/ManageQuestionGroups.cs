@@ -12,14 +12,14 @@ namespace AuditREST.DBUtils
         private string GET_ALL = "SELECT * FROM QuestionGroups";
         private string GET_ONE = "SELECT * FROM QuestionGroups WHERE QuestionGroupId = @QuestionId";
         private string GET_ALL_IN_CHECKLIST = "SELECT * FROM QuestionGroups WHERE ChecklistId = @ChecklistId";
-        public string ConnectionString { get; set; }
+        public override string ConnectionString { get; set; }
 
         public ManageQuestionGroups()
         {
             ConnectionString = new ConnectionString().ConnectionStreng;
         }
 
-        public IEnumerable<QuestionGroup> Get()
+        public override IEnumerable<QuestionGroup> Get()
         {
             List<QuestionGroup> liste = new List<QuestionGroup>();
 
@@ -39,7 +39,7 @@ namespace AuditREST.DBUtils
             return liste;
         }
 
-        private QuestionGroup ReadNextElement(SqlDataReader reader)
+        public override QuestionGroup ReadNextElement(SqlDataReader reader)
         {
             QuestionGroup questionGroup = new QuestionGroup();
 
@@ -55,7 +55,7 @@ namespace AuditREST.DBUtils
             return questionGroup;
         }
 
-        public QuestionGroup Get(int id)
+        public override QuestionGroup Get(int id)
         {
             QuestionGroup questionGroup = null;
 
@@ -76,11 +76,6 @@ namespace AuditREST.DBUtils
             }
 
             return questionGroup;
-        }
-
-        public bool Create(QuestionGroup input)
-        {
-            throw new NotImplementedException();
         }
 
         public List<QuestionGroup> GetInChecklist(int id)

@@ -12,14 +12,14 @@ namespace AuditREST.DBUtils
         private string GET_ALL = "SELECT * FROM AnswerTypes";
         private string GET_ONE = "SELECT * FROM AnswerTypes WHERE AnswerTypeId = @Id";
 
-        public string ConnectionString { get; set; }
+        public override string ConnectionString { get; set; }
 
         public ManageAnswerTypes()
         {
             ConnectionString = new ConnectionString().ConnectionStreng;
         }
 
-        public IEnumerable<AnswerType> Get()
+        public override IEnumerable<AnswerType> Get()
         {
             List<AnswerType> liste = new List<AnswerType>();
 
@@ -39,7 +39,7 @@ namespace AuditREST.DBUtils
             return liste;
         }
 
-        private AnswerType ReadNextElement(SqlDataReader reader)
+        public override AnswerType ReadNextElement(SqlDataReader reader)
         {
             AnswerType question = new AnswerType();
 
@@ -49,7 +49,7 @@ namespace AuditREST.DBUtils
             return question;
         }
 
-        public AnswerType Get(int id)
+        public override AnswerType Get(int id)
         {
             AnswerType question = null;
 
@@ -70,11 +70,6 @@ namespace AuditREST.DBUtils
             }
 
             return question;
-        }
-
-        public bool Create(AnswerType input)
-        {
-            throw new NotImplementedException();
         }
     }
 }
