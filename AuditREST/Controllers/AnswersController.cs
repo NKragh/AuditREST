@@ -31,9 +31,12 @@ namespace AuditREST.Controllers
 
         // POST: api/Answers
         [HttpPost]
-        public void Post([FromBody] QuestionAnswer value)
+        public void Post([FromBody] List<QuestionAnswer> questionAnswers)
         {
-            manager.Post(value);
+            foreach (var questionAnswer in questionAnswers)
+            {
+                manager.Post(questionAnswer);
+            }
         }
 
         // PUT: api/Answers/5
