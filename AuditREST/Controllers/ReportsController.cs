@@ -35,10 +35,11 @@ namespace AuditREST.Controllers
             manager.Post(value);
         }
 
-        // PUT: api/Reports/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Report value)
+        // PUT: api/Reports/Complete/5
+        [HttpGet("complete/{id}")]
+        public void Complete(int id)
         {
+            manager.Complete(id);
         }
 
         // DELETE: api/ApiWithActions/5

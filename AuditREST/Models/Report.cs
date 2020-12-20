@@ -9,27 +9,26 @@ namespace AuditREST.Models
     {
         public int Id { get; set; }
         public DateTime Completed { get; set; }
+        public string CompanyName { get; set; }
         public int CVR { get; set; }
         public Auditor Auditor { get; set; }
-        public Employee Employee1 { get; set; }
-        public Employee Employee2 { get; set; }
+        public List<Employee> Employees { get; set; }
         public List<QuestionAnswer> QuestionAnswers { get; set; }
 
         public Report()
         {
             Auditor = new Auditor();
-            Employee1 = new Employee();
-            Employee2 = new Employee();
+            Employees = new List<Employee>();
         }
 
-        public Report(int id, DateTime completed, int cvr, Auditor auditor, Employee employee1, Employee employee2)
+        public Report(int id, DateTime completed, int cvr, Auditor auditor, List<Employee> employees, string companyName)
         {
             Id = id;
             Completed = completed;
             CVR = cvr;
             Auditor = auditor;
-            Employee1 = employee1;
-            Employee2 = employee2;
+            Employees = employees;
+            CompanyName = companyName;
         }
 
         public int LoadAnswers(List<QuestionAnswer> questionAnswers)
@@ -38,5 +37,6 @@ namespace AuditREST.Models
 
             return QuestionAnswers.Count;
         }
+
     }
 }
