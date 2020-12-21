@@ -24,7 +24,8 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(2)) { employee.LastName = reader.GetString(2); }
             if (!reader.IsDBNull(3)) { employee.Email = reader.GetString(3); }
             if (!reader.IsDBNull(4)) { employee.Title = reader.GetString(4); }
-            if (!reader.IsDBNull(5)) { employee.CVR = reader.GetInt32(5); }
+
+            if (!reader.IsDBNull(5)) { employee.Customer = new ManageCustomers().Get(reader.GetInt32(5)); }
 
             return employee;
         }

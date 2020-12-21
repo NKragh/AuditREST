@@ -9,8 +9,8 @@ namespace AuditREST.DBUtils
 {
     public class ManageReports : IManager<Report>
     {
-        private string GET_ALL = "SELECT r.*, c.Name FROM Reports as r JOIN Customers as c ON c.CVR = r.CVR";
-        private string GET_ONE = "SELECT r.*, c.Name FROM Reports as r JOIN Customers as c ON c.CVR = r.CVR WHERE ReportId = @Id";
+        private string GET_ALL = "SELECT * FROM Reports";
+        private string GET_ONE = "SELECT * FROM Reports WHERE ReportId = @Id";
         private string INSERT = "INSERT INTO Reports (CVR, AuditorId) VALUES (@CVR, @AuditorId)";
         private string COMPLETE_REPORT = "UPDATE Reports SET Completed = @Completed WHERE ReportId = @ReportId";
         private string GET_PARTICIPANTS = "SELECT EmployeeId FROM Participants WHERE ReportId = @Id";
@@ -20,21 +20,19 @@ namespace AuditREST.DBUtils
         {
             ConnectionString = new ConnectionString().ConnectionStreng;
         }
+
         public override Report ReadNextElement(SqlDataReader reader)
         {
             Report report = new Report();
 
             if (!reader.IsDBNull(0)) { report.Id = reader.GetInt32(0); }
             if (!reader.IsDBNull(1)) { report.Completed = reader.GetDateTime(1); }
-            if (!reader.IsDBNull(2)) { report.CVR = reader.GetInt32(2); }
-            if (!reader.IsDBNull(3)) { report.Auditor.Id = reader.GetInt32(3); }
-            if (!reader.IsDBNull(4)) { report.CompanyName = reader.GetString(4); }
+
+            if (!reader.IsDBNull(2)) { report.Customer = new ManageCustomers().Get(reader.GetInt32(2)); }
+            if (!reader.IsDBNull(3)) { report.Auditor = new ManageAuditors().Get(reader.GetInt32(3)); }
 
             report.LoadAnswers(new ManageQuestionAnswers().GetFromReport(report.Id));
-
-            report.Auditor = new ManageAuditors().Get(report.Auditor.Id);
-
-            report.Employees = GetParticipants(report.Id);
+            report.LoadEmployees(GetParticipants(report.Id));
 
             return report;
         }
@@ -81,6 +79,7 @@ namespace AuditREST.DBUtils
             return report;
         }
 
+        //TODO: Refactor to extract this method into ManageEmployee.GetParticipants(), since it returns employees
         public List<Employee> GetParticipants(int reportId)
         {
             List<Employee> employees = new List<Employee>();
@@ -111,7 +110,7 @@ namespace AuditREST.DBUtils
             {
                 conn.Open();
 
-                cmd.Parameters.AddWithValue("@CVR", report.CVR);
+                cmd.Parameters.AddWithValue("@CVR", report.Customer.CVR);
                 cmd.Parameters.AddWithValue("@AuditorId", report.Auditor.Id);
 
                 //Returns true if query returns higher than 0 (affected rows)

@@ -11,26 +11,9 @@ namespace AuditREST.Models
         public string Answer { get; set; }
         public string Remark { get; set; }
         public string Comment { get; set; }
-        public int CVR { get; set; }
-        public int QuestionId { get; set; }
-        public int AuditorId { get; set; }
-        public int ReportId { get; set; }
-
-        public QuestionAnswer()
-        {
-            
-        }
-
-        public QuestionAnswer(int id, string answer, string remark, string comment, int cvr, int questionId, int auditorId, int reportId)
-        {
-            Id = id;
-            Answer = answer;
-            Remark = remark;
-            Comment = comment;
-            CVR = cvr;
-            QuestionId = questionId;
-            AuditorId = auditorId;
-            ReportId = reportId;
-        }
+        public Customer Customer { get; set; }
+        public Question Question { get; set; }
+        public Auditor Auditor { get; set; }
+        public Report Report { get; set; }
     }
 }

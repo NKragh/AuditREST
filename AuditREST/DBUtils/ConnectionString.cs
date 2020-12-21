@@ -11,6 +11,7 @@ namespace AuditREST.DBUtils
 
         public ConnectionString()
         {
+            //ConnectionStreng = "Data Source=nikolajdbserver.database.windows.net;Initial Catalog=auditdb;User ID=nikolajlogin;Password=Secret123;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             ConnectionStreng = "Data Source=nikolajdbserver.database.windows.net;Initial Catalog=auditdb;User ID=nikolajlogin;Password=Secret123;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         }
     }

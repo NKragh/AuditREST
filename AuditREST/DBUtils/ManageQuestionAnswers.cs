@@ -22,10 +22,11 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(1)) { questionAnswer.Answer = reader.GetString(1); }
             if (!reader.IsDBNull(2)) { questionAnswer.Remark = reader.GetString(2); }
             if (!reader.IsDBNull(3)) { questionAnswer.Comment = reader.GetString(3); }
-            if (!reader.IsDBNull(4)) { questionAnswer.CVR = reader.GetInt32(4); }
-            if (!reader.IsDBNull(5)) { questionAnswer.QuestionId = reader.GetInt32(5); }
-            if (!reader.IsDBNull(6)) { questionAnswer.AuditorId = reader.GetInt32(6); }
-            if (!reader.IsDBNull(7)) { questionAnswer.ReportId = reader.GetInt32(7); }
+
+            if (!reader.IsDBNull(4)) { questionAnswer.Customer = new ManageCustomers().Get(reader.GetInt32(4)); }
+            if (!reader.IsDBNull(5)) { questionAnswer.Question = new ManageQuestions().Get(reader.GetInt32(5)); }
+            if (!reader.IsDBNull(6)) { questionAnswer.Auditor = new ManageAuditors().Get(reader.GetInt32(6)); }
+            if (!reader.IsDBNull(7)) { questionAnswer.Report = new ManageReports().Get(reader.GetInt32(7)); }
 
             return questionAnswer;
         }
@@ -103,10 +104,11 @@ namespace AuditREST.DBUtils
                 cmd.Parameters.AddWithValue("@Answer", questionAnswer.Answer);
                 cmd.Parameters.AddWithValue("@Remark", questionAnswer.Remark);
                 cmd.Parameters.AddWithValue("@Comment", questionAnswer.Comment);
-                cmd.Parameters.AddWithValue("@CVR", questionAnswer.CVR);
-                cmd.Parameters.AddWithValue("@AuditorId", questionAnswer.AuditorId);
-                cmd.Parameters.AddWithValue("@QuestionId", questionAnswer.QuestionId);
-                cmd.Parameters.AddWithValue("@ReportId", questionAnswer.ReportId);
+
+                cmd.Parameters.AddWithValue("@CVR", questionAnswer.Customer.CVR);
+                cmd.Parameters.AddWithValue("@AuditorId", questionAnswer.Auditor.Id);
+                cmd.Parameters.AddWithValue("@QuestionId", questionAnswer.Question.QuestionId);
+                cmd.Parameters.AddWithValue("@ReportId", questionAnswer.Report.Id);
 
                 //Returns true if query returns higher than 0 (affected rows)
                 return cmd.ExecuteNonQuery() > 0;

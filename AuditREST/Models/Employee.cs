@@ -12,21 +12,6 @@ namespace AuditREST.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Title { get; set; }
-        public int CVR { get; set; }
-
-        public Employee()
-        {
-            
-        }
-
-        public Employee(int id, string firstName, string lastName, string email, string title, int cvr)
-        {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Title = title;
-            CVR = cvr;
-        }
+        public Customer Customer { get; set; }
     }
 }

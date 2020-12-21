@@ -7,14 +7,15 @@ using AuditREST.Models;
 
 namespace AuditREST.DBUtils
 {
-    public class ManageTrades
+    public class ManageTrades : IManager<Trade>
     {
         public List<Trade> Trades { get; set; }
-        public string ConnectionString { get; set; }
+        public override string ConnectionString { get; set; }
 
         private string GET_ALL = "SELECT * FROM Trades";
         private string GET_ON_QUESTION = "SELECT q.*, t.* FROM QuestionTrades as qt JOIN Questions as q ON q.QuestionId = qt.QuestionId " +
                                             "JOIN Trades as t ON t.TradeId = qt.TradeId WHERE qt.QuestionId = @QuestionId";
+        private string GET_ONE = "SELECT * FROM Trades WHERE TradeId = @Id";
 
         public ManageTrades()
         {
@@ -22,7 +23,7 @@ namespace AuditREST.DBUtils
             Trades = new List<Trade>();
         }
 
-        private Trade ReadNextElement(SqlDataReader reader)
+        public override Trade ReadNextElement(SqlDataReader reader)
         {
             Trade t = new Trade();
 
@@ -32,7 +33,7 @@ namespace AuditREST.DBUtils
             return t;
         }
 
-        public List<Trade> Get()
+        public override IEnumerable<Trade> Get()
         {
             List<Trade> liste = new List<Trade>();
             using (SqlConnection conn = new SqlConnection(ConnectionString))
@@ -69,6 +70,28 @@ namespace AuditREST.DBUtils
                 reader.Close();
             }
             return liste;
+        }
+
+        public override Trade Get(int id)
+        {
+            Trade trade = new Trade();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(GET_ONE, conn))
+            {
+                conn.Open();
+
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    trade = ReadNextElement(reader);
+                }
+                reader.Close();
+            }
+
+            return trade;
         }
     }
 }

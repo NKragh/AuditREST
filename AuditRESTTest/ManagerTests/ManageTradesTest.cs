@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using AuditREST.DBUtils;
 using AuditREST.Models;
@@ -27,7 +28,7 @@ namespace AuditRESTTest.ManagerTests
         [TestMethod]
         public void GetTrades()
         {
-            List<Trade> l = manager.Get();
+            List<Trade> l = manager.Get().ToList();
 
             Assert.AreNotEqual(0, l.Count);
         }
