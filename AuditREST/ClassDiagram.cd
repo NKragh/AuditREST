@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="AuditREST.Controllers.AnswersController">
+    <Position X="48" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAECAEAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Controllers\AnswersController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="manager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AuditREST.Controllers.ChecklistsController">
+    <Position X="8" Y="4.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAECAEAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Controllers\ChecklistsController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="manager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AuditREST.Controllers.ReportsController">
+    <Position X="40.25" Y="0.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAJAAAAAAAAECAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\ReportsController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="manager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ConnectionString" Collapsed="true">
+    <Position X="52.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DBUtils\ConnectionString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.IManager&lt;T&gt;">
+    <Position X="30.5" Y="1" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAACAAAAACAAA=</HashCode>
+      <FileName>DBUtils\IManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageAnswerTypes">
+    <Position X="28.25" Y="3.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABACAAAAAAAAAAAAAAAACBAAAACAAA=</HashCode>
+      <FileName>DBUtils\ManageAnswerTypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageAuditors">
+    <Position X="44" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABACAAAAAAAAAAAAAAAACBAAAACAAA=</HashCode>
+      <FileName>DBUtils\ManageAuditors.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageChecklists">
+    <Position X="12" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>QAQAAAAEAAAAAQBACAAAAAAAAAEAAEAAACBAAAACAAA=</HashCode>
+      <FileName>DBUtils\ManageChecklists.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageCustomers">
+    <Position X="20.25" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAABACAAAAAAACAAAAAAAACBAAAACAAA=</HashCode>
+      <FileName>DBUtils\ManageCustomers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageEmployees">
+    <Position X="36.25" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABACAAAAAAAAAAAAAAAACBAAAACAAA=</HashCode>
+      <FileName>DBUtils\ManageEmployees.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageQuestionGroups">
+    <Position X="16" Y="3.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAABACAAAAAAAAAAAAAAAACBAACACAAA=</HashCode>
+      <FileName>DBUtils\ManageQuestionGroups.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageQuestions">
+    <Position X="24.25" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>QAAAAIAAAAAAAQBAKAAAAAAAAAEAAEAAACBADAACAAA=</HashCode>
+      <FileName>DBUtils\ManageQuestions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageReports">
+    <Position X="40.25" Y="3.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAgACAAAAAJACAAAAAgACAAAAAAAACBAAAACAAA=</HashCode>
+      <FileName>DBUtils\ManageReports.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageTrades">
+    <Position X="32.5" Y="3.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABBBCAAAAAAAAAAAAAIAACBAAAACAAA=</HashCode>
+      <FileName>DBUtils\ManageTrades.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.DBUtils.SqlCommandExt" Collapsed="true">
+    <Position X="54.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DBUtils\SqlCommandExt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.Models.AnswerType">
+    <Position X="8" Y="17.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Models\AnswerType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.Models.Auditor">
+    <Position X="14" Y="10" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Auditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.Models.Checklist">
+    <Position X="14.75" Y="15.5" Width="2.25" />
+    <AssociationLine Name="QuestionGroups" Type="AuditREST.Models.QuestionGroup">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.752" Y="0.224" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAEQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Checklist.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="QuestionGroups" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AuditREST.Models.Customer">
+    <Position X="7.75" Y="12.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAQAAAAAAAAAIAAAIAAAAAA=</HashCode>
+      <FileName>Models\Customer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.Models.Employee">
+    <Position X="7.75" Y="10" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAACAAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAg=</HashCode>
+      <FileName>Models\Employee.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CVR" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AuditREST.Models.Question">
+    <Position X="11.5" Y="15.5" Width="2" />
+    <AssociationLine Name="AnswerType" Type="AuditREST.Models.AnswerType">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.488" Y="-0.106" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="SubQuestions" Type="AuditREST.Models.Question" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="13.5" Y="16" />
+        <Point X="13.75" Y="16" />
+        <Point X="13.75" Y="16.938" />
+        <Point X="13.5" Y="16.938" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.109" Y="0.223" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACBIAQgQACAQAAAA=</HashCode>
+      <FileName>Models\Question.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="AnswerType" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="SubQuestions" />
+      <Property Name="Trades" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AuditREST.Models.QuestionGroup">
+    <Position X="12.75" Y="18.5" Width="2.5" />
+    <AssociationLine Name="Questions" Type="AuditREST.Models.Question">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.843" Y="1.04" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACBAAAAAAAAAAAAAAAAAQAAAAAAAAEAAgAAAAAAAA=</HashCode>
+      <FileName>Models\QuestionGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Questions" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AuditREST.Models.Report">
+    <Position X="11" Y="9.75" Width="2" />
+    <AssociationLine Name="QuestionAnswers" Type="AuditREST.Models.QuestionAnswer">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.845" Y="0.189" Height="0.182" Width="2.74" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACQAACAAAAAAIAACAAAAAACAAAAAAAIAAAAAAAAAQ=</HashCode>
+      <FileName>Models\Report.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Auditor" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Employees" />
+      <Property Name="QuestionAnswers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AuditREST.Models.Trade">
+    <Position X="8" Y="15.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Trade.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuditREST.Models.QuestionAnswer">
+    <Position X="11.25" Y="13.25" Width="2.5" />
+    <AssociationLine Name="Report" Type="AuditREST.Models.Report">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.21" Y="0.459" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAECAAAEAAAAAAAAACAAAAAAAAAAAAAEAAAAAgAABQA=</HashCode>
+      <FileName>Models\QuestionAnswer.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Customer" />
+      <Property Name="Auditor" />
+      <Property Name="Question" />
+      <Property Name="Report" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AuditREST.DBUtils.ManageQuestionAnswers">
+    <Position X="48" Y="3.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAABACAAAAAAACAAAAEAAACFAAAACAAA=</HashCode>
+      <FileName>DBUtils\ManageQuestionAnswers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
