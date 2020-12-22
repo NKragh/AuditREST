@@ -41,7 +41,7 @@ namespace AuditREST.DBUtils
         {
             List<Report> liste = new List<Report>();
 
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(ConnectionString)) //Send conn med videre som parameter
             using (SqlCommand cmd = new SqlCommand(GET_ALL, conn))
             {
                 conn.Open();
