@@ -15,5 +15,13 @@ namespace AuditREST.Models
         public Question Question { get; set; }
         public Auditor Auditor { get; set; }
         public Report Report { get; set; }
+
+        public QuestionAnswer()
+        {
+            Customer = new Customer();
+            Question = new Question();
+            Auditor = new Auditor();
+            Report = new Report();
+        }
     }
 }

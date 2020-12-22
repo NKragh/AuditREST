@@ -7,7 +7,7 @@ using AuditREST.Models;
 
 namespace AuditREST.DBUtils
 {
-    public class ManageQuestionGroups: IManager<QuestionGroup>
+    public class ManageQuestionGroups : IManager<QuestionGroup>
     {
         private string GET_ALL = "SELECT * FROM QuestionGroups";
         private string GET_ONE = "SELECT * FROM QuestionGroups WHERE QuestionGroupId = @QuestionId";
@@ -17,6 +17,17 @@ namespace AuditREST.DBUtils
         public ManageQuestionGroups()
         {
             ConnectionString = new ConnectionString().ConnectionStreng;
+        }
+
+        public override QuestionGroup ReadNextElement(SqlDataReader reader)
+        {
+            QuestionGroup questionGroup = new QuestionGroup();
+
+            if (!reader.IsDBNull(0)) { questionGroup.Id = reader.GetInt32(0); }
+            if (!reader.IsDBNull(1)) { questionGroup.Name = reader.GetString(1); }
+            if (!reader.IsDBNull(2)) { questionGroup.ChecklistId = reader.GetInt32(2); }
+
+            return questionGroup;
         }
 
         public override IEnumerable<QuestionGroup> Get()
@@ -33,26 +44,16 @@ namespace AuditREST.DBUtils
                     QuestionGroup item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
+
                 reader.Close();
             }
+                foreach (QuestionGroup questionGroup in liste)
+                {
+                    questionGroup.Questions = new ManageQuestions().GetInQuestionGroup(questionGroup.Id);
+                }
 
             return liste;
-        }
-
-        public override QuestionGroup ReadNextElement(SqlDataReader reader)
-        {
-            QuestionGroup questionGroup = new QuestionGroup();
-
-            if (!reader.IsDBNull(0)) { questionGroup.Id = reader.GetInt32(0); }
-            if (!reader.IsDBNull(1)) { questionGroup.Name = reader.GetString(1); }
-            if (!reader.IsDBNull(2)) { questionGroup.ChecklistId = reader.GetInt32(2); }
-
-            questionGroup.Questions = new ManageQuestions().GetInQuestionGroup(questionGroup.Id);
-
-            //SubQuestions
-            //if (!reader.IsDBNull(3)) { QuestionGroup. = reader.GetString(3); }
-
-            return questionGroup;
         }
 
         public override QuestionGroup Get(int id)
@@ -72,8 +73,10 @@ namespace AuditREST.DBUtils
                     questionGroup = ReadNextElement(reader);
                 }
 
+
                 reader.Close();
             }
+                questionGroup.Questions = new ManageQuestions().GetInQuestionGroup(questionGroup.Id);
 
             return questionGroup;
         }
@@ -89,12 +92,18 @@ namespace AuditREST.DBUtils
                 cmd.Parameters.AddWithValue("@ChecklistId", id);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
-                { 
+                {
                     QuestionGroup item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
+
                 reader.Close();
             }
+                foreach (QuestionGroup questionGroup in liste)
+                {
+                    questionGroup.Questions = new ManageQuestions().GetInQuestionGroup(questionGroup.Id);
+                }
 
             return liste;
 

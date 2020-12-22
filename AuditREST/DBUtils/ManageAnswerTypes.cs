@@ -19,6 +19,16 @@ namespace AuditREST.DBUtils
             ConnectionString = new ConnectionString().ConnectionStreng;
         }
 
+        public override AnswerType ReadNextElement(SqlDataReader reader)
+        {
+            AnswerType question = new AnswerType();
+
+            if (!reader.IsDBNull(0)) { question.AnswerTypeId = reader.GetInt32(0); }
+            if (!reader.IsDBNull(1)) { question.AnswerOption = reader.GetString(1); }
+
+            return question;
+        }
+
         public override IEnumerable<AnswerType> Get()
         {
             List<AnswerType> liste = new List<AnswerType>();
@@ -37,16 +47,6 @@ namespace AuditREST.DBUtils
             }
 
             return liste;
-        }
-
-        public override AnswerType ReadNextElement(SqlDataReader reader)
-        {
-            AnswerType question = new AnswerType();
-
-            if (!reader.IsDBNull(0)) { question.AnswerTypeId = reader.GetInt32(0); }
-            if (!reader.IsDBNull(1)) { question.AnswerOption = reader.GetString(1); }
-
-            return question;
         }
 
         public override AnswerType Get(int id)

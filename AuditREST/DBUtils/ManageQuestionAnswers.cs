@@ -23,10 +23,10 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(2)) { questionAnswer.Remark = reader.GetString(2); }
             if (!reader.IsDBNull(3)) { questionAnswer.Comment = reader.GetString(3); }
 
-            if (!reader.IsDBNull(4)) { questionAnswer.Customer = new ManageCustomers().Get(reader.GetInt32(4)); }
-            if (!reader.IsDBNull(5)) { questionAnswer.Question = new ManageQuestions().Get(reader.GetInt32(5)); }
-            if (!reader.IsDBNull(6)) { questionAnswer.Auditor = new ManageAuditors().Get(reader.GetInt32(6)); }
-            if (!reader.IsDBNull(7)) { questionAnswer.Report = new ManageReports().Get(reader.GetInt32(7)); }
+            if (!reader.IsDBNull(4)) { questionAnswer.Customer.CVR = reader.GetInt32(4); }
+            if (!reader.IsDBNull(5)) { questionAnswer.Question.QuestionId = reader.GetInt32(5); }
+            if (!reader.IsDBNull(6)) { questionAnswer.Auditor.Id = reader.GetInt32(6); }
+            if (!reader.IsDBNull(7)) { questionAnswer.Report.Id = reader.GetInt32(7); }
 
             return questionAnswer;
         }
@@ -45,8 +45,17 @@ namespace AuditREST.DBUtils
                     QuestionAnswer item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
+
                 reader.Close();
             }
+                foreach (QuestionAnswer questionAnswer in liste)
+                {
+                    questionAnswer.Customer = new ManageCustomers().Get(questionAnswer.Customer.CVR);
+                    questionAnswer.Auditor = new ManageAuditors().Get(questionAnswer.Auditor.Id);
+                    questionAnswer.Report = new ManageReports().Get(questionAnswer.Report.Id);
+                    questionAnswer.Question = new ManageQuestions().Get(questionAnswer.Question.QuestionId);
+                }
 
             return liste;
         }
@@ -67,8 +76,14 @@ namespace AuditREST.DBUtils
                 {
                     questionAnswer = ReadNextElement(reader);
                 }
+
                 reader.Close();
             }
+
+            questionAnswer.Customer = new ManageCustomers().Get(questionAnswer.Customer.CVR);
+            questionAnswer.Auditor = new ManageAuditors().Get(questionAnswer.Auditor.Id);
+            questionAnswer.Report = new ManageReports().Get(questionAnswer.Report.Id);
+            questionAnswer.Question = new ManageQuestions().Get(questionAnswer.Question.QuestionId);
 
             return questionAnswer;
         }
@@ -88,8 +103,17 @@ namespace AuditREST.DBUtils
                     QuestionAnswer item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
+
                 reader.Close();
             }
+                foreach (QuestionAnswer questionAnswer in liste)
+                {
+                    questionAnswer.Customer = new ManageCustomers().Get(questionAnswer.Customer.CVR);
+                    questionAnswer.Auditor = new ManageAuditors().Get(questionAnswer.Auditor.Id);
+                    questionAnswer.Report = new ManageReports().Get(questionAnswer.Report.Id);
+                    questionAnswer.Question = new ManageQuestions().Get(questionAnswer.Question.QuestionId);
+                }
 
             return liste;
         }

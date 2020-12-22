@@ -19,6 +19,16 @@ namespace AuditREST.DBUtils
             ConnectionString = new ConnectionString().ConnectionStreng;
         }
 
+        public override Checklist ReadNextElement(SqlDataReader reader)
+        {
+            Checklist cl = new Checklist();
+
+            if (!reader.IsDBNull(0)) { cl.Id = reader.GetInt32(0); }
+            if (!reader.IsDBNull(1)) { cl.Name = reader.GetString(1); }
+
+            return cl;
+        }
+
         public override IEnumerable<Checklist> Get()
         {
             List<Checklist> liste = new List<Checklist>();
@@ -32,21 +42,15 @@ namespace AuditREST.DBUtils
                     Checklist item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
+
                 reader.Close();
             }
+            foreach (Checklist checklist in liste)
+            {
+                checklist.QuestionGroups = new ManageQuestionGroups().GetInChecklist(checklist.Id);
+            }
             return liste;
-        }
-
-        public override Checklist ReadNextElement(SqlDataReader reader)
-        {
-            Checklist cl = new Checklist();
-
-            if (!reader.IsDBNull(0)) { cl.Id = reader.GetInt32(0); }
-            if (!reader.IsDBNull(1)) { cl.Name = reader.GetString(1); }
-            
-            cl.QuestionGroups = new ManageQuestionGroups().GetInChecklist(cl.Id);
-
-            return cl;
         }
 
         public override Checklist Get(int id)
@@ -65,8 +69,10 @@ namespace AuditREST.DBUtils
                     checklist = ReadNextElement(reader);
                 }
 
+
                 reader.Close();
             }
+            checklist.QuestionGroups = new ManageQuestionGroups().GetInChecklist(checklist.Id);
             return checklist;
         }
 
@@ -108,7 +114,7 @@ namespace AuditREST.DBUtils
                 conn.Open();
 
                 cmd.Parameters.AddWithValue("@QuestionId", updatedChecklist.Id);
-                
+
 
                 return cmd.ExecuteNonQuery() > 0;
             }

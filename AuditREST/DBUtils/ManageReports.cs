@@ -27,12 +27,8 @@ namespace AuditREST.DBUtils
 
             if (!reader.IsDBNull(0)) { report.Id = reader.GetInt32(0); }
             if (!reader.IsDBNull(1)) { report.Completed = reader.GetDateTime(1); }
-
-            if (!reader.IsDBNull(2)) { report.Customer = new ManageCustomers().Get(reader.GetInt32(2)); }
-            if (!reader.IsDBNull(3)) { report.Auditor = new ManageAuditors().Get(reader.GetInt32(3)); }
-
-            report.LoadAnswers(new ManageQuestionAnswers().GetFromReport(report.Id));
-            report.LoadEmployees(GetParticipants(report.Id));
+            if (!reader.IsDBNull(2)) { report.Customer.CVR = reader.GetInt32(2); }
+            if (!reader.IsDBNull(3)) { report.Auditor.Id = reader.GetInt32(3); }
 
             return report;
         }
@@ -51,7 +47,16 @@ namespace AuditREST.DBUtils
                     Report item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
                 reader.Close();
+            }
+
+            foreach (Report report in liste)
+            {
+                report.Customer = new ManageCustomers().Get(report.Customer.CVR);
+                report.Auditor = new ManageAuditors().Get(report.Auditor.Id);
+                report.LoadAnswers(new ManageQuestionAnswers().GetFromReport(report.Id));
+                report.LoadEmployees(GetParticipants(report.Id));
             }
 
             return liste;
@@ -73,8 +78,14 @@ namespace AuditREST.DBUtils
                 {
                     report = ReadNextElement(reader);
                 }
+
+
                 reader.Close();
             }
+            report.Customer = new ManageCustomers().Get(report.Customer.CVR);
+            report.Auditor = new ManageAuditors().Get(report.Auditor.Id);
+            report.LoadAnswers(new ManageQuestionAnswers().GetFromReport(report.Id));
+            report.LoadEmployees(GetParticipants(report.Id));
 
             return report;
         }
@@ -97,6 +108,7 @@ namespace AuditREST.DBUtils
                 {
                     employees.Add(emanager.Get(reader.GetInt32(0)));
                 }
+
                 reader.Close();
             }
 

@@ -30,11 +30,8 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(0)) { question.QuestionId = reader.GetInt32(0); }
             if (!reader.IsDBNull(1)) { question.Text = reader.GetString(1); }
             if (!reader.IsDBNull(2)) { question.QuestionGroupId = reader.GetInt32(2); }
-            if (!reader.IsDBNull(3)) { question.AnswerType = new ManageAnswerTypes().Get(reader.GetInt32(3)); }
+            if (!reader.IsDBNull(3)) { question.AnswerType.AnswerTypeId = reader.GetInt32(3); }
             if (!reader.IsDBNull(4)) { question.ParentId = reader.GetInt32(4); }
-
-            question.LoadSubQuestions(new ManageQuestions().GetWithParentQuestionId(question.QuestionId));
-            question.Trades = new ManageTrades().GetOnQuestion(question);
 
             return question;
         }
@@ -53,7 +50,15 @@ namespace AuditREST.DBUtils
                     Question item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
+
                 reader.Close();
+            }
+            foreach (Question question in liste)
+            {
+                question.LoadSubQuestions(new ManageQuestions().GetWithParentQuestionId(question.QuestionId));
+                question.Trades = new ManageTrades().GetOnQuestion(question);
+                question.AnswerType = new ManageAnswerTypes().Get(question.AnswerType.AnswerTypeId);
             }
 
             return liste;
@@ -78,9 +83,13 @@ namespace AuditREST.DBUtils
 
                 reader.Close();
             }
+            question.LoadSubQuestions(new ManageQuestions().GetWithParentQuestionId(question.QuestionId));
+            question.Trades = new ManageTrades().GetOnQuestion(question);
+            question.AnswerType = new ManageAnswerTypes().Get(question.AnswerType.AnswerTypeId);
 
             return question;
         }
+
         public List<Question> GetWithParentQuestionId(int questionId)
         {
             List<Question> liste = new List<Question>();
@@ -96,7 +105,15 @@ namespace AuditREST.DBUtils
                     Question item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
+
                 reader.Close();
+            }
+            foreach (Question question in liste)
+            {
+                question.LoadSubQuestions(new ManageQuestions().GetWithParentQuestionId(question.QuestionId));
+                question.Trades = new ManageTrades().GetOnQuestion(question);
+                question.AnswerType = new ManageAnswerTypes().Get(question.AnswerType.AnswerTypeId);
             }
 
             return liste;
@@ -117,8 +134,16 @@ namespace AuditREST.DBUtils
                     Question item = ReadNextElement(reader);
                     liste.Add(item);
                 }
+
+
                 reader.Close();
             }
+                foreach (Question question in liste)
+                {
+                    question.LoadSubQuestions(new ManageQuestions().GetWithParentQuestionId(question.QuestionId));
+                    question.Trades = new ManageTrades().GetOnQuestion(question);
+                    question.AnswerType = new ManageAnswerTypes().Get(question.AnswerType.AnswerTypeId);
+                }
 
             return liste;
         }

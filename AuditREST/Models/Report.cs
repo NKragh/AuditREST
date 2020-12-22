@@ -17,6 +17,7 @@ namespace AuditREST.Models
         public Report()
         {
             Auditor = new Auditor();
+            Customer = new Customer();
             Employees = new List<Employee>();
         }
 

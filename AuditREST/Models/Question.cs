@@ -17,6 +17,7 @@ namespace AuditREST.Models
 
         public Question()
         {
+            AnswerType = new AnswerType();
         }
 
         public Question(string text, AnswerType answerType, int? questionGroupId, int? parentId)
