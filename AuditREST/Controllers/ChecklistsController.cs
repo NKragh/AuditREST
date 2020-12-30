@@ -17,9 +17,9 @@ namespace AuditREST.Controllers
 
         // GET: api/Checklists
         [HttpGet]
-        public IEnumerable<Checklist> Get(Trade trade)
+        public IEnumerable<Checklist> Get()
         {
-            return manager.Get(trade);
+            return manager.Get();
         }
 
         // GET: api/Checklists/5

@@ -24,7 +24,7 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(2)) { employee.LastName = reader.GetString(2); }
             if (!reader.IsDBNull(3)) { employee.Email = reader.GetString(3); }
             if (!reader.IsDBNull(4)) { employee.Title = reader.GetString(4); }
-            if (!reader.IsDBNull(5)) { employee.Customer.CVR = reader.GetInt32(5); }
+            if (!reader.IsDBNull(5)) { employee.Customer = reader.GetInt32(5); }
 
             return employee;
         }
@@ -47,10 +47,6 @@ namespace AuditREST.DBUtils
 
                 reader.Close();
             }
-                foreach (Employee employee in liste)
-                {
-                    employee.Customer = new ManageCustomers().Get(employee.Customer.CVR);
-                }
 
             return liste;
         }
@@ -75,7 +71,6 @@ namespace AuditREST.DBUtils
 
                 reader.Close();
             }
-                employee.Customer = new ManageCustomers().Get(employee.Customer.CVR);
 
             return employee;
         }

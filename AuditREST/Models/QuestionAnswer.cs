@@ -11,17 +11,9 @@ namespace AuditREST.Models
         public string Answer { get; set; }
         public string Remark { get; set; }
         public string Comment { get; set; }
-        public Customer Customer { get; set; }
-        public Question Question { get; set; }
-        public Auditor Auditor { get; set; }
-        public Report Report { get; set; }
-
-        public QuestionAnswer()
-        {
-            Customer = new Customer();
-            Question = new Question();
-            Auditor = new Auditor();
-            Report = new Report();
-        }
+        public int Customer { get; set; }
+        public int Question { get; set; }
+        public int Auditor { get; set; }
+        public int Report { get; set; }
     }
 }

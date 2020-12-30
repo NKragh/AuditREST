@@ -12,6 +12,6 @@ namespace AuditREST.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Title { get; set; }
-        public Customer Customer { get; set; }
+        public int Customer { get; set; }
     }
 }
