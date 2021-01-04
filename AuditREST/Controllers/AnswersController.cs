@@ -29,13 +29,6 @@ namespace AuditREST.Controllers
             return manager.Get(id);
         }
         
-        // GET: api/Answers/test
-        [HttpGet("test")]
-        public IEnumerable<QuestionAnswer> TestGet()
-        {
-            return manager.TestGet();
-        }
-
         // POST: api/Answers
         [HttpPost]
         public void Post([FromBody] List<QuestionAnswer> questionAnswers)

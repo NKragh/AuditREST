@@ -6,13 +6,16 @@ namespace AuditREST.DBUtils
 {
     public class ManageQuestionAnswers : IManager<QuestionAnswer>
     {
-        private string GET_ALL = "SELECT * FROM QuestionAnswers";
-        private string GET_ONE = "SELECT * FROM QuestionAnswers WHERE AnswerId = @Id";
-        private string GET_IN_REPORT = "SELECT * FROM QuestionAnswers WHERE ReportId = @Id";
-        private string INSERT = "INSERT INTO QuestionAnswers (Answer, Comment, CVR, QuestionId, AuditorId, ReportId) " +
-                                "VALUES (@Answer, @Comment, @CVR, @QuestionId, @AuditorId, @ReportId)";
+        private static string GET_WITH_REMARK = "SELECT qa.*, CASE WHEN qa.Answer = 'OK' THEN r.OK WHEN qa.Answer = 'Afvigelse' THEN r.Afvigelse " +
+                                         "WHEN qa.Answer = 'Observation' THEN r.Observation WHEN qa.Answer = 'Forbedring' THEN r.Forbedring " +
+                                         "WHEN qa.Answer = 'Ikke relevant' THEN r.[Ikke relevant] END AS Remark " +
+                                         "FROM QuestionAnswers AS qa JOIN Remarks AS r ON r.QuestionId = qa.QuestionId";
 
-        private string GET_WITH_REMARK = "SELECT qa.*, r.OK, r.Afvigelse, r.Observation, r.Forbedring, r.[Ikke relevant] FROM QuestionAnswers AS qa JOIN Remarks AS r ON r.QuestionId = qa.QuestionId";
+        private static string GET_ONE = GET_WITH_REMARK + " WHERE qa.AnswerId = @Id";
+        private static string GET_IN_REPORT = GET_WITH_REMARK + " WHERE qa.ReportId = @Id";
+        private static string INSERT = "INSERT INTO QuestionAnswers (Answer, Comment, CVR, QuestionId, AuditorId, ReportId) " +
+                                 "VALUES (@Answer, @Comment, @CVR, @QuestionId, @AuditorId, @ReportId)";
+
 
         public override string ConnectionString { get; set; }
 
@@ -27,6 +30,7 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(4)) { questionAnswer.QuestionId = reader.GetInt32(4); }
             if (!reader.IsDBNull(5)) { questionAnswer.AuditorId = reader.GetInt32(5); }
             if (!reader.IsDBNull(6)) { questionAnswer.ReportId = reader.GetInt32(6); }
+            if (!reader.IsDBNull(7)) { questionAnswer.Remark = reader.GetString(7); }
 
             return questionAnswer;
         }
@@ -36,7 +40,7 @@ namespace AuditREST.DBUtils
             List<QuestionAnswer> liste = new List<QuestionAnswer>();
 
             using (SqlConnection conn = new SqlConnection(ConnectionString))
-            using (SqlCommand cmd = new SqlCommand(GET_ALL, conn))
+            using (SqlCommand cmd = new SqlCommand(GET_WITH_REMARK, conn))
             {
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -49,56 +53,6 @@ namespace AuditREST.DBUtils
 
                 reader.Close();
             }
-            foreach (QuestionAnswer questionAnswer in liste)
-            {
-                questionAnswer.Remark =
-                    new ManageRemarks().GetRemarkText(questionAnswer.QuestionId, questionAnswer.Answer);
-            }
-            return liste;
-        }
-        
-        public IEnumerable<QuestionAnswer> TestGet()
-        {
-            List<QuestionAnswer> liste = new List<QuestionAnswer>();
-
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            using (SqlCommand cmd = new SqlCommand(GET_ALL, conn))
-            {
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    QuestionAnswer questionAnswer = new QuestionAnswer();
-
-                    if (!reader.IsDBNull(0)) { questionAnswer.Id = reader.GetInt32(0); }
-                    if (!reader.IsDBNull(1)) { questionAnswer.Answer = reader.GetString(1); }
-                    if (!reader.IsDBNull(2)) { questionAnswer.Comment = reader.GetString(2); }
-                    if (!reader.IsDBNull(3)) { questionAnswer.CVR = reader.GetInt32(3); }
-                    if (!reader.IsDBNull(4)) { questionAnswer.QuestionId = reader.GetInt32(4); }
-                    if (!reader.IsDBNull(5)) { questionAnswer.AuditorId = reader.GetInt32(5); }
-                    if (!reader.IsDBNull(6)) { questionAnswer.ReportId = reader.GetInt32(6); }
-
-
-                    liste.Add(questionAnswer);
-                }
-
-
-                reader.Close();
-
-
-            }
-            foreach (QuestionAnswer questionAnswer in liste)
-            {
-                questionAnswer.Remark =
-                    new ManageRemarks().GetRemarkText(questionAnswer.QuestionId, questionAnswer.Answer);
-            }
-
-            //questionAnswer.CVR = new ManageCustomers().Get(questionAnswer.CVR.CVR);
-            //questionAnswer.AuditorId = new ManageAuditors().Get(questionAnswer.AuditorId.Id);
-            //questionAnswer.ReportId = new ManageReports().Get(questionAnswer.ReportId.Id);
-            //questionAnswer.QuestionId = new ManageQuestions().Get(questionAnswer.QuestionId.QuestionId);
-            //}
-
             return liste;
         }
 
@@ -121,8 +75,6 @@ namespace AuditREST.DBUtils
 
                 reader.Close();
             }
-            
-            questionAnswer.Remark = new ManageRemarks().GetRemarkText(questionAnswer.QuestionId, questionAnswer.Answer);
 
             return questionAnswer;
         }
@@ -145,11 +97,7 @@ namespace AuditREST.DBUtils
 
                 reader.Close();
             }
-            foreach (QuestionAnswer questionAnswer in liste)
-            {
-                questionAnswer.Remark =
-                    new ManageRemarks().GetRemarkText(questionAnswer.QuestionId, questionAnswer.Answer);
-            }
+
             return liste;
         }
 
