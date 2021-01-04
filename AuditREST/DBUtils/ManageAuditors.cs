@@ -64,7 +64,7 @@ namespace AuditREST.DBUtils
             return auditor;
         }
 
-        //public bool Post(Customer customer)
+        //public bool Post(CVR customer)
         //{
         //    using (SqlConnection conn = new SqlConnection(ConnectionString))
         //    using (SqlCommand cmd = new SqlCommand(INSERT, conn))

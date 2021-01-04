@@ -28,6 +28,13 @@ namespace AuditREST.Controllers
             return manager.Get(id);
         }
 
+        // GET: api/Reports/5
+        [HttpGet("customer/{cvr}")]
+        public IEnumerable<Report> GetByCustomer(int cvr)
+        {
+            return manager.GetByCustomer(cvr);
+        }
+
         // POST: api/Reports
         [HttpPost]
         public void Post([FromBody] Report value)

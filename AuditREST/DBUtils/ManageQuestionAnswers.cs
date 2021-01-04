@@ -9,8 +9,8 @@ namespace AuditREST.DBUtils
         private string GET_ALL = "SELECT * FROM QuestionAnswers";
         private string GET_ONE = "SELECT * FROM QuestionAnswers WHERE AnswerId = @Id";
         private string GET_IN_REPORT = "SELECT * FROM QuestionAnswers WHERE ReportId = @Id";
-        private string INSERT = "INSERT INTO QuestionAnswers (Answer, Remark, Comment, CVR, QuestionId, AuditorId, ReportId) " +
-                                "VALUES (@Answer, @Remark, @Comment, @CVR, @QuestionId, @AuditorId, @ReportId)";
+        private string INSERT = "INSERT INTO QuestionAnswers (Answer, Comment, CVR, QuestionId, AuditorId, ReportId) " +
+                                "VALUES (@Answer, @Comment, @CVR, @QuestionId, @AuditorId, @ReportId)";
 
         private string GET_WITH_REMARK = "SELECT qa.*, r.OK, r.Afvigelse, r.Observation, r.Forbedring, r.[Ikke relevant] FROM QuestionAnswers AS qa JOIN Remarks AS r ON r.QuestionId = qa.QuestionId";
 
@@ -23,10 +23,10 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(0)) { questionAnswer.Id = reader.GetInt32(0); }
             if (!reader.IsDBNull(1)) { questionAnswer.Answer = reader.GetString(1); }
             if (!reader.IsDBNull(2)) { questionAnswer.Comment = reader.GetString(2); }
-            if (!reader.IsDBNull(3)) { questionAnswer.Customer = reader.GetInt32(3); }
-            if (!reader.IsDBNull(4)) { questionAnswer.Question = reader.GetInt32(4); }
-            if (!reader.IsDBNull(5)) { questionAnswer.Auditor = reader.GetInt32(5); }
-            if (!reader.IsDBNull(6)) { questionAnswer.Report = reader.GetInt32(6); }
+            if (!reader.IsDBNull(3)) { questionAnswer.CVR = reader.GetInt32(3); }
+            if (!reader.IsDBNull(4)) { questionAnswer.QuestionId = reader.GetInt32(4); }
+            if (!reader.IsDBNull(5)) { questionAnswer.AuditorId = reader.GetInt32(5); }
+            if (!reader.IsDBNull(6)) { questionAnswer.ReportId = reader.GetInt32(6); }
 
             return questionAnswer;
         }
@@ -52,7 +52,7 @@ namespace AuditREST.DBUtils
             foreach (QuestionAnswer questionAnswer in liste)
             {
                 questionAnswer.Remark =
-                    new ManageRemarks().GetRemarkText(questionAnswer.Question, questionAnswer.Answer);
+                    new ManageRemarks().GetRemarkText(questionAnswer.QuestionId, questionAnswer.Answer);
             }
             return liste;
         }
@@ -73,10 +73,10 @@ namespace AuditREST.DBUtils
                     if (!reader.IsDBNull(0)) { questionAnswer.Id = reader.GetInt32(0); }
                     if (!reader.IsDBNull(1)) { questionAnswer.Answer = reader.GetString(1); }
                     if (!reader.IsDBNull(2)) { questionAnswer.Comment = reader.GetString(2); }
-                    if (!reader.IsDBNull(3)) { questionAnswer.Customer = reader.GetInt32(3); }
-                    if (!reader.IsDBNull(4)) { questionAnswer.Question = reader.GetInt32(4); }
-                    if (!reader.IsDBNull(5)) { questionAnswer.Auditor = reader.GetInt32(5); }
-                    if (!reader.IsDBNull(6)) { questionAnswer.Report = reader.GetInt32(6); }
+                    if (!reader.IsDBNull(3)) { questionAnswer.CVR = reader.GetInt32(3); }
+                    if (!reader.IsDBNull(4)) { questionAnswer.QuestionId = reader.GetInt32(4); }
+                    if (!reader.IsDBNull(5)) { questionAnswer.AuditorId = reader.GetInt32(5); }
+                    if (!reader.IsDBNull(6)) { questionAnswer.ReportId = reader.GetInt32(6); }
 
 
                     liste.Add(questionAnswer);
@@ -90,13 +90,13 @@ namespace AuditREST.DBUtils
             foreach (QuestionAnswer questionAnswer in liste)
             {
                 questionAnswer.Remark =
-                    new ManageRemarks().GetRemarkText(questionAnswer.Question, questionAnswer.Answer);
+                    new ManageRemarks().GetRemarkText(questionAnswer.QuestionId, questionAnswer.Answer);
             }
 
-            //questionAnswer.Customer = new ManageCustomers().Get(questionAnswer.Customer.CVR);
-            //questionAnswer.Auditor = new ManageAuditors().Get(questionAnswer.Auditor.Id);
-            //questionAnswer.Report = new ManageReports().Get(questionAnswer.Report.Id);
-            //questionAnswer.Question = new ManageQuestions().Get(questionAnswer.Question.QuestionId);
+            //questionAnswer.CVR = new ManageCustomers().Get(questionAnswer.CVR.CVR);
+            //questionAnswer.AuditorId = new ManageAuditors().Get(questionAnswer.AuditorId.Id);
+            //questionAnswer.ReportId = new ManageReports().Get(questionAnswer.ReportId.Id);
+            //questionAnswer.QuestionId = new ManageQuestions().Get(questionAnswer.QuestionId.QuestionId);
             //}
 
             return liste;
@@ -122,7 +122,7 @@ namespace AuditREST.DBUtils
                 reader.Close();
             }
             
-            questionAnswer.Remark = new ManageRemarks().GetRemarkText(questionAnswer.Question, questionAnswer.Answer);
+            questionAnswer.Remark = new ManageRemarks().GetRemarkText(questionAnswer.QuestionId, questionAnswer.Answer);
 
             return questionAnswer;
         }
@@ -148,7 +148,7 @@ namespace AuditREST.DBUtils
             foreach (QuestionAnswer questionAnswer in liste)
             {
                 questionAnswer.Remark =
-                    new ManageRemarks().GetRemarkText(questionAnswer.Question, questionAnswer.Answer);
+                    new ManageRemarks().GetRemarkText(questionAnswer.QuestionId, questionAnswer.Answer);
             }
             return liste;
         }
@@ -161,13 +161,11 @@ namespace AuditREST.DBUtils
                 conn.Open();
 
                 cmd.Parameters.AddWithValue("@Answer", questionAnswer.Answer);
-                cmd.Parameters.AddWithValue("@Remark", questionAnswer.Remark);
                 cmd.Parameters.AddWithValue("@Comment", questionAnswer.Comment);
-
-                cmd.Parameters.AddWithValue("@CVR", questionAnswer.Customer);
-                cmd.Parameters.AddWithValue("@AuditorId", questionAnswer.Auditor);
-                cmd.Parameters.AddWithValue("@QuestionId", questionAnswer.Question);
-                cmd.Parameters.AddWithValue("@ReportId", questionAnswer.Report);
+                cmd.Parameters.AddWithValue("@CVR", questionAnswer.CVR);
+                cmd.Parameters.AddWithValue("@AuditorId", questionAnswer.AuditorId);
+                cmd.Parameters.AddWithValue("@QuestionId", questionAnswer.QuestionId);
+                cmd.Parameters.AddWithValue("@ReportId", questionAnswer.ReportId);
 
                 //Returns true if query returns higher than 0 (affected rows)
                 return cmd.ExecuteNonQuery() > 0;

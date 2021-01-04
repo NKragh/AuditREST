@@ -9,11 +9,12 @@ namespace AuditREST.DBUtils
 {
     public class ManageReports : IManager<Report>
     {
-        private string GET_ALL = "SELECT * FROM Reports";
+        private string GET_ALL = "SELECT * FROM Reports ORDER BY Completed DESC";
         private string GET_ONE = "SELECT * FROM Reports WHERE ReportId = @Id";
         private string INSERT = "INSERT INTO Reports (CVR, AuditorId) VALUES (@CVR, @AuditorId)";
         private string COMPLETE_REPORT = "UPDATE Reports SET Completed = @Completed WHERE ReportId = @ReportId";
         private string GET_PARTICIPANTS = "SELECT EmployeeId FROM Participants WHERE ReportId = @Id";
+        private string GET_BY_CUSTOMER = "SELECT * FROM Reports WHERE CVR = @CVR ORDER BY Completed DESC";
         public override string ConnectionString { get; set; }
 
         public ManageReports()
@@ -143,6 +144,36 @@ namespace AuditREST.DBUtils
                 //Returns true if query returns higher than 0 (affected rows)
                 return cmd.ExecuteNonQuery() > 0;
             }
+        }
+
+        public IEnumerable<Report> GetByCustomer(int cvr)
+        {
+            List<Report> liste = new List<Report>();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString)) //Send conn med videre som parameter
+            using (SqlCommand cmd = new SqlCommand(GET_BY_CUSTOMER, conn))
+            {
+                cmd.Parameters.AddWithValue("@CVR", cvr);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Report item = ReadNextElement(reader);
+                    liste.Add(item);
+                }
+
+                reader.Close();
+            }
+
+            foreach (Report report in liste)
+            {
+                report.Customer = new ManageCustomers().Get(report.Customer.CVR);
+                report.Auditor = new ManageAuditors().Get(report.Auditor.Id);
+                report.LoadAnswers(new ManageQuestionAnswers().GetFromReport(report.Id));
+                report.LoadEmployees(GetParticipants(report.Id));
+            }
+
+            return liste;
         }
     }
 }
