@@ -9,7 +9,6 @@ namespace AuditREST.DBUtils
 {
     public class ManageRemarks : IManager<Remark>
     {
-        private string GET_ALL = "SELECT * FROM Remarks WHERE QuestionId = @Id";
         private string GET_Ok = "SELECT OK FROM Remarks WHERE QuestionId = @Id";
         private string GET_Afvigelse = "SELECT Afvigelse FROM Remarks WHERE QuestionId = @Id";
         private string GET_Observation = "SELECT Observation FROM Remarks WHERE QuestionId = @Id";
