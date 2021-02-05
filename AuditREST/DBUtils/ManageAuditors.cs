@@ -8,6 +8,9 @@ namespace AuditREST.DBUtils
     {
         private string GET_ALL = "SELECT * FROM Auditors";
         private string GET_ONE = "SELECT * FROM Auditors WHERE AuditorId = @Id";
+        private string GET_BY_REPORT = "SELECT a.* FROM Reports as r " +
+                                       "JOIN Auditors as a ON a.AuditorId = r.AuditorId " +
+                                       "WHERE r.ReportId = @ReportId";
 
         public override string ConnectionString { get; set; }
 
@@ -80,5 +83,26 @@ namespace AuditREST.DBUtils
         //        return cmd.ExecuteNonQuery() > 0;
         //    }
         //}
+        public Auditor GetByReport(int reportId)
+        {
+            Auditor auditor = new Auditor();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(GET_BY_REPORT, conn))
+            {
+                conn.Open();
+
+                cmd.Parameters.AddWithValue("@ReportId", reportId);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    auditor = ReadNextElement(reader);
+                }
+                reader.Close();
+            }
+
+            return auditor;
+        }
     }
 }

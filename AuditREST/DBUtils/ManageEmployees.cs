@@ -8,6 +8,9 @@ namespace AuditREST.DBUtils
     {
         private string GET_ALL = "SELECT * FROM Employees";
         private string GET_ONE = "SELECT * FROM Employees WHERE EmployeeId = @Id";
+        private string GET_BY_REPORT = "SELECT e.* FROM Employees as e " +
+                                       "JOIN Participants as p ON p.EmployeeId = e.EmployeeId " +
+                                       "WHERE p.ReportId = @ReportId";
         public override string ConnectionString { get; set; }
 
         public ManageEmployees()
@@ -68,11 +71,35 @@ namespace AuditREST.DBUtils
                     employee = ReadNextElement(reader);
                 }
 
-
                 reader.Close();
             }
 
             return employee;
+        }
+
+        public List<Employee> GetByReport(int reportId)
+        {
+            List<Employee> l = new List<Employee>();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(GET_BY_REPORT, conn))
+            {
+                conn.Open();
+
+                cmd.Parameters.AddWithValue("@ReportId", reportId);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Employee employee = ReadNextElement(reader);
+                    l.Add(employee);
+                }
+
+
+                reader.Close();
+            }
+
+            return l;
         }
         //public bool Post(CVR customer)
         //{
