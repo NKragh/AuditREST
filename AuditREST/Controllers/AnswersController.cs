@@ -23,7 +23,7 @@ namespace AuditREST.Controllers
         }
 
         // GET: api/Answers/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public QuestionAnswer Get(int id)
         {
             return manager.Get(id);
