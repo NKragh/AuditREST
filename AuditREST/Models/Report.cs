@@ -13,6 +13,7 @@ namespace AuditREST.Models
         public Auditor Auditor { get; set; }
         public List<Employee> Employees { get; set; }
         public List<QuestionAnswer> QuestionAnswers { get; set; }
+        public DateTime Archived { get; set; }
 
         public Report()
         {

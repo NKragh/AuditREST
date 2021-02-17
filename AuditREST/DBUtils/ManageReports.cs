@@ -11,10 +11,11 @@ namespace AuditREST.DBUtils
     {
         private string GET_ALL = "SELECT * FROM Reports ORDER BY Completed DESC";
         private string GET_ONE = "SELECT * FROM Reports WHERE ReportId = @Id";
-        private string INSERT = "INSERT INTO Reports (CVR, AuditorId) VALUES (@CVR, @AuditorId)";
+        private string INSERT = "INSERT INTO Reports (CVR, AuditorId) VALUES (@CVR, @AuditorId) SELECT SCOPE_IDENTITY() AS [Id]";
         private string COMPLETE_REPORT = "UPDATE Reports SET Completed = @Completed WHERE ReportId = @ReportId";
         private string GET_PARTICIPANTS = "SELECT EmployeeId FROM Participants WHERE ReportId = @Id";
         private string GET_BY_CUSTOMER = "SELECT * FROM Reports WHERE CVR = @CVR ORDER BY Completed DESC";
+        private string ARCHIVE_REPORT = "UPDATE Reports SET Archived = @Archived WHERE ReportId = @ReportId";
         public override string ConnectionString { get; set; }
 
         public ManageReports()
@@ -30,6 +31,7 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(1)) { report.Completed = reader.GetDateTime(1); }
             if (!reader.IsDBNull(2)) { report.Customer.CVR = reader.GetInt32(2); }
             if (!reader.IsDBNull(3)) { report.Auditor.Id = reader.GetInt32(3); }
+            if (!reader.IsDBNull(4)) { report.Archived = reader.GetDateTime(4); }
 
             return report;
         }
@@ -116,8 +118,10 @@ namespace AuditREST.DBUtils
             return employees;
         }
 
-        public bool Post(Report report)
+        public int Post(Report report)
         {
+            int id = 0;
+
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             using (SqlCommand cmd = new SqlCommand(INSERT, conn))
             {
@@ -127,8 +131,14 @@ namespace AuditREST.DBUtils
                 cmd.Parameters.AddWithValue("@AuditorId", report.Auditor.Id);
 
                 //Returns true if query returns higher than 0 (affected rows)
-                return cmd.ExecuteNonQuery() > 0;
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    id = Decimal.ToInt32(reader.GetDecimal(0));
+                };
             }
+
+            return id;
         }
 
         public bool Complete(int reportId)
@@ -174,6 +184,20 @@ namespace AuditREST.DBUtils
             }
 
             return liste;
+        }
+
+        public void Archive(int id)
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(ARCHIVE_REPORT, conn))
+            {
+                conn.Open();
+
+                cmd.Parameters.AddWithValue("@Archived", DateTime.Now.Date);
+                cmd.Parameters.AddWithValue("@ReportId", id);
+
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }

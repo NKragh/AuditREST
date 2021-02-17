@@ -37,16 +37,23 @@ namespace AuditREST.Controllers
 
         // POST: api/Reports
         [HttpPost]
-        public void Post([FromBody] Report value)
+        public int Post([FromBody] Report value)
         {
-            manager.Post(value);
+            return manager.Post(value);
         }
 
         // PUT: api/Reports/Complete/5
-        [HttpGet("complete/{id}")]
+        [HttpPut("complete/{id}")]
         public void Complete(int id)
         {
             manager.Complete(id);
+        }
+
+        // PUT: api/Reports/Complete/5
+        [HttpPut("archive/{id}")]
+        public void Archive(int id)
+        {
+            manager.Archive(id);
         }
 
         // DELETE: api/ApiWithActions/5
