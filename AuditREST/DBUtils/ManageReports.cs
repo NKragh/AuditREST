@@ -1,21 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using AuditREST.Models;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using HtmlToOpenXml;
+using HtmlToOpenXml.IO;
+using PuppeteerSharp;
 
 namespace AuditREST.DBUtils
 {
     public class ManageReports : IManager<Report>
     {
-        private string GET_ALL = "SELECT * FROM Reports ORDER BY Completed DESC";
-        private string GET_ONE = "SELECT * FROM Reports WHERE ReportId = @Id";
-        private string INSERT = "INSERT INTO Reports (CVR, AuditorId) VALUES (@CVR, @AuditorId) SELECT SCOPE_IDENTITY() AS [Id]";
-        private string COMPLETE_REPORT = "UPDATE Reports SET Completed = @Completed WHERE ReportId = @ReportId";
-        private string GET_PARTICIPANTS = "SELECT EmployeeId FROM Participants WHERE ReportId = @Id";
-        private string GET_BY_CUSTOMER = "SELECT * FROM Reports WHERE CVR = @CVR ORDER BY Completed DESC";
-        private string ARCHIVE_REPORT = "UPDATE Reports SET Archived = @Archived WHERE ReportId = @ReportId";
+        private readonly string GET_ALL = "SELECT * FROM Reports ORDER BY Completed DESC";
+        private readonly string GET_ONE = "SELECT * FROM Reports WHERE ReportId = @Id";
+        private readonly string INSERT = "INSERT INTO Reports (CVR, AuditorId) VALUES (@CVR, @AuditorId) SELECT SCOPE_IDENTITY() AS [Id]";
+        private readonly string COMPLETE_REPORT = "UPDATE Reports SET Completed = @Completed WHERE ReportId = @ReportId";
+        private readonly string GET_PARTICIPANTS = "SELECT EmployeeId FROM Participants WHERE ReportId = @Id";
+        private readonly string GET_BY_CUSTOMER = "SELECT * FROM Reports WHERE CVR = @CVR ORDER BY Completed DESC";
+        private readonly string ARCHIVE_REPORT = "UPDATE Reports SET Archived = @Archived WHERE ReportId = @ReportId";
         public override string ConnectionString { get; set; }
 
         public ManageReports()
@@ -118,6 +127,36 @@ namespace AuditREST.DBUtils
             return employees;
         }
 
+        public IEnumerable<Report> GetByCustomer(int cvr)
+        {
+            List<Report> liste = new List<Report>();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString)) //Send conn med videre som parameter
+            using (SqlCommand cmd = new SqlCommand(GET_BY_CUSTOMER, conn))
+            {
+                cmd.Parameters.AddWithValue("@CVR", cvr);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Report item = ReadNextElement(reader);
+                    liste.Add(item);
+                }
+
+                reader.Close();
+            }
+
+            foreach (Report report in liste)
+            {
+                report.Customer = new ManageCustomers().Get(report.Customer.CVR);
+                report.Auditor = new ManageAuditors().Get(report.Auditor.Id);
+                report.LoadAnswers(new ManageQuestionAnswers().GetFromReport(report.Id));
+                report.LoadEmployees(GetParticipants(report.Id));
+            }
+
+            return liste;
+        }
+
         public int Post(Report report)
         {
             int id = 0;
@@ -156,36 +195,6 @@ namespace AuditREST.DBUtils
             }
         }
 
-        public IEnumerable<Report> GetByCustomer(int cvr)
-        {
-            List<Report> liste = new List<Report>();
-
-            using (SqlConnection conn = new SqlConnection(ConnectionString)) //Send conn med videre som parameter
-            using (SqlCommand cmd = new SqlCommand(GET_BY_CUSTOMER, conn))
-            {
-                cmd.Parameters.AddWithValue("@CVR", cvr);
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    Report item = ReadNextElement(reader);
-                    liste.Add(item);
-                }
-
-                reader.Close();
-            }
-
-            foreach (Report report in liste)
-            {
-                report.Customer = new ManageCustomers().Get(report.Customer.CVR);
-                report.Auditor = new ManageAuditors().Get(report.Auditor.Id);
-                report.LoadAnswers(new ManageQuestionAnswers().GetFromReport(report.Id));
-                report.LoadEmployees(GetParticipants(report.Id));
-            }
-
-            return liste;
-        }
-
         public void Archive(int id)
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
@@ -197,6 +206,86 @@ namespace AuditREST.DBUtils
                 cmd.Parameters.AddWithValue("@ReportId", id);
 
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void GenerateReport(int id)
+        {
+            Report report = Get(id);
+
+            List<QuestionAnswer> afvigelser = report.GetResult("Afvigelse");
+            List<QuestionAnswer> observationer = report.GetResult("Observation");
+            List<QuestionAnswer> forbedringer = report.GetResult("Forbedring");
+
+            String reportTitle = report.Customer.Name + " - KLS tjekliste og rapport fra intern efterprøvning - " +
+                                 report.Completed;
+
+            /*
+             * auditor
+             * completed
+             * companyName
+             * cvr
+             * employees
+             * answers
+             */
+
+            string[,] questionAnswers = new string[report.QuestionAnswers.Count + 1, 4];
+
+            questionAnswers[0, 0] = "Answer";
+            questionAnswers[0, 1] = "Remark";
+            questionAnswers[0, 2] = "Comment";
+            questionAnswers[0, 3] = "Reference";
+            for (int i = 0; i < report.QuestionAnswers.Count; i++)
+            {
+                questionAnswers[i + 1, 0] = report.QuestionAnswers[i].Answer;
+                questionAnswers[i + 1, 1] = report.QuestionAnswers[i].Remark;
+                questionAnswers[i + 1, 2] = report.QuestionAnswers[i].Comment;
+                questionAnswers[i + 1, 3] = report.QuestionAnswers[i].QuestionId.ToString();
+            }
+
+            GenerateDocument("test");
+        }
+
+        public async void GenerateDocument(string filename)
+        {
+            //Go to website (get HTML)
+            const string url = "http://pele-easj.dk/";
+            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+            var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true
+            });
+            var page = await browser.NewPageAsync();
+            await page.GoToAsync(url);
+            
+            //Generate PDF file from HTML
+            await page.PdfAsync(filename + ".pdf");
+            //string html = await page.GetContentAsync();
+            //Debug.WriteLine(html.Length);
+
+            string html = Properties.Resources.demo;
+            //Generate Docx file from HTML
+            string docxname = filename + ".docx";
+            if (File.Exists(docxname)) File.Delete(docxname);
+            using (MemoryStream generatedDocument = new MemoryStream())
+            {
+                using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
+                {
+                    MainDocumentPart mainPart = package.MainDocumentPart;
+                    if (mainPart == null)
+                    {
+                        mainPart = package.AddMainDocumentPart();
+                        new Document(new Body()).Save(mainPart);
+                    }
+
+                    HtmlConverter converter = new HtmlConverter(mainPart);
+                    converter.BaseImageUrl = new Uri(url);
+                    converter.ParseHtml(html);
+
+                    mainPart.Document.Save();
+                }
+
+                File.WriteAllBytes(docxname, generatedDocument.ToArray());
             }
         }
     }

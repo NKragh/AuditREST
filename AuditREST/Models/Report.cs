@@ -35,5 +35,10 @@ namespace AuditREST.Models
 
             return Employees.Count;
         }
+
+        public List<QuestionAnswer> GetResult(string answer)
+        {
+            return QuestionAnswers.FindAll(qa => qa.Answer == answer);
+        }
     }
 }

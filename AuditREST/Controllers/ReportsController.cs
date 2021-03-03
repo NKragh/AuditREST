@@ -47,6 +47,7 @@ namespace AuditREST.Controllers
         public void Complete(int id)
         {
             manager.Complete(id);
+            manager.GenerateReport(id);
         }
 
         // PUT: api/Reports/Complete/5
