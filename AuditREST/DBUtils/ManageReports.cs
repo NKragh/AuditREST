@@ -218,7 +218,7 @@ namespace AuditREST.DBUtils
             List<QuestionAnswer> forbedringer = report.GetResult("Forbedring");
 
             String reportTitle = report.Customer.Name + " - KLS tjekliste og rapport fra intern efterprøvning - " +
-                                 report.Completed;
+                                 report.Completed.ToShortDateString();
 
             /*
              * auditor
@@ -243,7 +243,7 @@ namespace AuditREST.DBUtils
                 questionAnswers[i + 1, 3] = report.QuestionAnswers[i].QuestionId.ToString();
             }
 
-            GenerateDocument("test");
+            GenerateDocument(reportTitle);
         }
 
         public async void GenerateDocument(string filename)
@@ -259,13 +259,13 @@ namespace AuditREST.DBUtils
             await page.GoToAsync(url);
             
             //Generate PDF file from HTML
-            await page.PdfAsync(filename + ".pdf");
-            //string html = await page.GetContentAsync();
+            await page.PdfAsync("C:/temp/" + filename + ".pdf");
+            string html = await page.GetContentAsync();
             //Debug.WriteLine(html.Length);
 
-            string html = Properties.Resources.demo;
+            //string html = Properties.Resources.demo;
             //Generate Docx file from HTML
-            string docxname = filename + ".docx";
+            string docxname = "C:/temp/" + filename + ".docx";
             if (File.Exists(docxname)) File.Delete(docxname);
             using (MemoryStream generatedDocument = new MemoryStream())
             {
