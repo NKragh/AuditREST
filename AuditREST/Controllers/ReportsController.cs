@@ -27,6 +27,13 @@ namespace AuditREST.Controllers
         {
             return manager.Get(id);
         }
+        
+        // GET: api/Reports/report/5
+        [HttpGet("report/{id}")]
+        public void GeneratReport(int id)
+        {
+            manager.GenerateReport(id);
+        }
 
         // GET: api/Reports/5
         [HttpGet("customer/{cvr}")]
@@ -47,7 +54,6 @@ namespace AuditREST.Controllers
         public void Complete(int id)
         {
             manager.Complete(id);
-            manager.GenerateReport(id);
         }
 
         // PUT: api/Reports/Complete/5

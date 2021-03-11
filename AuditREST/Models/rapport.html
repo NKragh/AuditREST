@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.69/pdfmake.min.js"></script>
+
+    <title>React App</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+          "Helvetica Neue", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      code {
+        font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+          monospace;
+      }
+
+      /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zcmMvaW5kZXguY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsU0FBUztFQUNUOztjQUVZO0VBQ1osbUNBQW1DO0VBQ25DLGtDQUFrQztBQUNwQzs7QUFFQTtFQUNFO2FBQ1c7QUFDYiIsInNvdXJjZXNDb250ZW50IjpbImJvZHkge1xuICBtYXJnaW46IDA7XG4gIGZvbnQtZmFtaWx5OiAtYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsICdTZWdvZSBVSScsICdSb2JvdG8nLCAnT3h5Z2VuJyxcbiAgICAnVWJ1bnR1JywgJ0NhbnRhcmVsbCcsICdGaXJhIFNhbnMnLCAnRHJvaWQgU2FucycsICdIZWx2ZXRpY2EgTmV1ZScsXG4gICAgc2Fucy1zZXJpZjtcbiAgLXdlYmtpdC1mb250LXNtb290aGluZzogYW50aWFsaWFzZWQ7XG4gIC1tb3otb3N4LWZvbnQtc21vb3RoaW5nOiBncmF5c2NhbGU7XG59XG5cbmNvZGUge1xuICBmb250LWZhbWlseTogc291cmNlLWNvZGUtcHJvLCBNZW5sbywgTW9uYWNvLCBDb25zb2xhcywgJ0NvdXJpZXIgTmV3JyxcbiAgICBtb25vc3BhY2U7XG59XG4iXSwic291cmNlUm9vdCI6IiJ9 */
+    </style>
+    <style>
+      body {
+        background-color: #eaecf0;
+      }
+
+      th {
+        background-color: #3a5b78;
+        color: white;
+      }
+
+      .container {
+        background-color: white;
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+
+      .row {
+        margin: 0;
+      }
+
+      /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zcmMvQXBwLmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLHlCQUF5QjtBQUMzQjs7QUFFQTtFQUNFLHlCQUF5QjtFQUN6QixZQUFZO0FBQ2Q7O0FBRUE7RUFDRSx1QkFBdUI7RUFDdkIsaUJBQWlCO0VBQ2pCLG9CQUFvQjtBQUN0Qjs7QUFFQTtFQUNFLFNBQVM7QUFDWCIsInNvdXJjZXNDb250ZW50IjpbImJvZHkge1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWFlY2YwO1xufVxuXG50aCB7XG4gIGJhY2tncm91bmQtY29sb3I6ICMzYTViNzg7XG4gIGNvbG9yOiB3aGl0ZTtcbn1cblxuLmNvbnRhaW5lciB7XG4gIGJhY2tncm91bmQtY29sb3I6IHdoaXRlO1xuICBwYWRkaW5nLXRvcDogMTVweDtcbiAgcGFkZGluZy1ib3R0b206IDE1cHg7XG59XG5cbi5yb3cge1xuICBtYXJnaW46IDA7XG59XG4iXSwic291cmNlUm9vdCI6IiJ9 */
+    </style>
+    <style>
+      nav ul {
+        list-style: none;
+        display: flex;
+        background-color: black;
+        margin-bottom: 20px;
+      }
+
+      nav ul li {
+        padding: 20px;
+      }
+
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .current {
+        border-bottom: 4px solid white;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      p {
+        margin-bottom: 15px;
+      }
+
+      /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zcmMvY29tcG9uZW50cy9OYXYvbmF2LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGdCQUFnQjtFQUNoQixhQUFhO0VBQ2IsdUJBQXVCO0VBQ3ZCLG1CQUFtQjtBQUNyQjs7QUFFQTtFQUNFLGFBQWE7QUFDZjs7QUFFQTtFQUNFLFlBQVk7RUFDWixxQkFBcUI7QUFDdkI7O0FBRUE7RUFDRSw4QkFBOEI7QUFDaEM7O0FBRUE7RUFDRSxtQkFBbUI7QUFDckI7O0FBRUE7RUFDRSxtQkFBbUI7QUFDckIiLCJzb3VyY2VzQ29udGVudCI6WyJuYXYgdWwge1xyXG4gIGxpc3Qtc3R5bGU6IG5vbmU7XHJcbiAgZGlzcGxheTogZmxleDtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiBibGFjaztcclxuICBtYXJnaW4tYm90dG9tOiAyMHB4O1xyXG59XHJcblxyXG5uYXYgdWwgbGkge1xyXG4gIHBhZGRpbmc6IDIwcHg7XHJcbn1cclxuXHJcbm5hdiB1bCBsaSBhIHtcclxuICBjb2xvcjogd2hpdGU7XHJcbiAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xyXG59XHJcblxyXG4uY3VycmVudCB7XHJcbiAgYm9yZGVyLWJvdHRvbTogNHB4IHNvbGlkIHdoaXRlO1xyXG59XHJcblxyXG5oMSB7XHJcbiAgbWFyZ2luLWJvdHRvbTogMjBweDtcclxufVxyXG5cclxucCB7XHJcbiAgbWFyZ2luLWJvdHRvbTogMTVweDtcclxufVxyXG4iXSwic291cmNlUm9vdCI6IiJ9 */
+    </style>
+    <style>
+      textarea {
+        height: 5em;
+        width: 75%;
+      }
+
+      /*
+
+Nu kan man skrive en rigtig lan kommentar til det svar man har givet i checklisten, uden der er er grund til at scrolle og alt muligt. Det er der så når man har skrevet ngoet der er meget langt, for så er boksen trods alt ikke større.
+*/
+      .radiobutton {
+        padding: 0px 0px;
+        text-align: center;
+        font-size: 0.7em;
+        /* border: 1px solid rgba(0, 0, 0, 0.1); */
+      }
+
+      .radiobuttonholder {
+        margin: 16px 0px;
+      }
+
+      /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zcmMvY29tcG9uZW50cy9BdWRpdC9jb21wb25lbnRzL0NoZWNrbGlzdC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxXQUFXO0VBQ1gsVUFBVTtBQUNaOztBQUVBOzs7Q0FHQztBQUNEO0VBQ0UsZ0JBQWdCO0VBQ2hCLGtCQUFrQjtFQUNsQixnQkFBZ0I7RUFDaEIsMENBQTBDO0FBQzVDOztBQUVBO0VBQ0UsZ0JBQWdCO0FBQ2xCIiwic291cmNlc0NvbnRlbnQiOlsidGV4dGFyZWEge1xyXG4gIGhlaWdodDogNWVtO1xyXG4gIHdpZHRoOiA3NSU7XHJcbn1cclxuXHJcbi8qXHJcblxyXG5OdSBrYW4gbWFuIHNrcml2ZSBlbiByaWd0aWcgbGFuIGtvbW1lbnRhciB0aWwgZGV0IHN2YXIgbWFuIGhhciBnaXZldCBpIGNoZWNrbGlzdGVuLCB1ZGVuIGRlciBlciBlciBncnVuZCB0aWwgYXQgc2Nyb2xsZSBvZyBhbHQgbXVsaWd0LiBEZXQgZXIgZGVyIHPDpSBuw6VyIG1hbiBoYXIgc2tyZXZldCBuZ29ldCBkZXIgZXIgbWVnZXQgbGFuZ3QsIGZvciBzw6UgZXIgYm9rc2VuIHRyb2RzIGFsdCBpa2tlIHN0w7hycmUuXHJcbiovXHJcbi5yYWRpb2J1dHRvbiB7XHJcbiAgcGFkZGluZzogMHB4IDBweDtcclxuICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgZm9udC1zaXplOiAwLjdlbTtcclxuICAvKiBib3JkZXI6IDFweCBzb2xpZCByZ2JhKDAsIDAsIDAsIDAuMSk7ICovXHJcbn1cclxuXHJcbi5yYWRpb2J1dHRvbmhvbGRlciB7XHJcbiAgbWFyZ2luOiAxNnB4IDBweDtcclxufVxyXG4iXSwic291cmNlUm9vdCI6IiJ9 */
+    </style>
+    <style>
+      /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsInNvdXJjZVJvb3QiOiIifQ== */
+    </style>
+    <style>
+      body {
+        background-color: #eaecf0;
+      }
+
+      td:first-child {
+        border-left: 0;
+      }
+
+      td:last-child {
+        border-right: 0;
+      }
+
+      td {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 8px;
+      }
+
+      th {
+        padding: 12px;
+        border: 1px solid black;
+        color: white;
+      }
+
+      table {
+        background-color: white;
+      }
+
+      .actionbutton {
+        margin: 0 5px;
+        font-size: 1rem;
+        padding: 0 2px;
+        cursor: pointer;
+        padding: 5px;
+      }
+
+      /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zcmMvY29tcG9uZW50cy9BdWRpdHMvQXVkaXRzLmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLHlCQUF5QjtBQUMzQjs7QUFFQTtFQUNFLGNBQWM7QUFDaEI7O0FBRUE7RUFDRSxlQUFlO0FBQ2pCOztBQUVBO0VBQ0Usb0NBQW9DO0VBQ3BDLFlBQVk7QUFDZDs7QUFFQTtFQUNFLGFBQWE7RUFDYix1QkFBdUI7RUFDdkIsWUFBWTtBQUNkOztBQUVBO0VBQ0UsdUJBQXVCO0FBQ3pCOztBQUVBO0VBQ0UsYUFBYTtFQUNiLGVBQWU7RUFDZixjQUFjO0VBQ2QsZUFBZTtFQUNmLFlBQVk7QUFDZCIsInNvdXJjZXNDb250ZW50IjpbImJvZHkge1xyXG4gIGJhY2tncm91bmQtY29sb3I6ICNlYWVjZjA7XHJcbn1cclxuXHJcbnRkOmZpcnN0LWNoaWxkIHtcclxuICBib3JkZXItbGVmdDogMDtcclxufVxyXG5cclxudGQ6bGFzdC1jaGlsZCB7XHJcbiAgYm9yZGVyLXJpZ2h0OiAwO1xyXG59XHJcblxyXG50ZCB7XHJcbiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSgwLCAwLCAwLCAwLjEpO1xyXG4gIHBhZGRpbmc6IDhweDtcclxufVxyXG5cclxudGgge1xyXG4gIHBhZGRpbmc6IDEycHg7XHJcbiAgYm9yZGVyOiAxcHggc29saWQgYmxhY2s7XHJcbiAgY29sb3I6IHdoaXRlO1xyXG59XHJcblxyXG50YWJsZSB7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogd2hpdGU7XHJcbn1cclxuXHJcbi5hY3Rpb25idXR0b24ge1xyXG4gIG1hcmdpbjogMCA1cHg7XHJcbiAgZm9udC1zaXplOiAxcmVtO1xyXG4gIHBhZGRpbmc6IDAgMnB4O1xyXG4gIGN1cnNvcjogcG9pbnRlcjtcclxuICBwYWRkaW5nOiA1cHg7XHJcbn1cclxuIl0sInNvdXJjZVJvb3QiOiIifQ== */
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <div class="app">
+        <nav>
+          <ul>
+            <li><a href="/">Customers</a></li>
+            <li><a href="/audits">Audits</a></li>
+            <li><a href="/dropbox">Dropbox</a></li>
+          </ul>
+        </nav>
+        <div class="container">
+          <div>
+            <h1>Stamdata</h1>
+            <p>Dato for audit:</p>
+            <div class="row">
+              <div class="col-sm-2">
+                <div class="row" style="padding: 4px">Virksomhed</div>
+                <div class="row" style="padding: 4px">Auditor</div>
+                <div class="row" style="padding: 4px">Deltagere</div>
+              </div>
+              <div class="col">
+                <div class="row" style="padding: 4px"></div>
+                <div class="row" style="padding: 4px">
+                  John Mandrup, Ledende auditor, Lekon Rådgivning ApS
+                </div>
+                <div class="row" style="padding: 4px">
+                  Dan Andersen, Direktør
+                </div>
+              </div>
+            </div>
+            <div></div>
+          </div>
+          <div>
+            <h1>Oversigt (KPI, grafer m.m.)</h1>
+            <h2>Denne audits resultater:</h2>
+            <div>Antal afvigelser: 1</div>
+            <div>Antal observationer: 0</div>
+            <div>Antal forbedringer: 0</div>
+            <h2>Udvikling fra sidste audit:</h2>
+            <div>Afvigelser: -1</div>
+            <div>Observationer: -1</div>
+            <div>Forbedringer: 0</div>
+            <img
+              src="/graph_example.png"
+              alt=""
+              style="
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 80%;
+              "
+            />
+          </div>
+          <div>
+            <h1>Resultater der kræver handling</h1>
+            <table>
+              <thead>
+                <th>Resultat</th>
+                <th>Bemærkning</th>
+                <th>Anbefaling</th>
+                <th>Kommentar</th>
+                <th>Reference</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Afvigelse</td>
+                  <td>Virksomheden levede ikke op til kravet.</td>
+                  <td>
+                    Virksomheden skal gøre dette for at leve op til kravet.
+                  </td>
+                  <td>Der skal være særligt fokus på dette.</td>
+                  <td><a href="#">Bek. 9837 §11 stk. 3</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <hr />
+          <h1>Pagebreak</h1>
+          <hr />
+          <div>
+            <h1>Alle resultater</h1>
+            <table>
+              <thead>
+                <th>Resultat</th>
+                <th>Bemærkning</th>
+                <th>Anbefaling</th>
+                <th>Kommentar</th>
+                <th>Reference</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Afvigelse</td>
+                  <td>Virksomheden levede ikke op til kravet.</td>
+                  <td>
+                    Virksomheden skal gøre dette for at leve op til kravet.
+                  </td>
+                  <td>Der skal være særligt fokus på dette.</td>
+                  <td><a href="#">Bek. 9837 §11 stk. 3</a></td>
+                </tr>
+                <tr>
+                  <td>OK</td>
+                  <td>Virksomheden levede op til kravet.</td>
+                  <td></td>
+                  <td></td>
+                  <td><a href="#">Bek. 9837 §9 stk. 2</a></td>
+                </tr>
+                <tr>
+                  <td>OK</td>
+                  <td>Virksomheden levede op til kravet.</td>
+                  <td></td>
+                  <td>Virksomheden udmærkede sig ved dette.</td>
+                  <td><a href="#">Bek. 9837 §17 stk. 1</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+    <script src="/static/js/bundle.js"></script>
+    <script src="/static/js/0.chunk.js"></script>
+    <script src="/static/js/main.chunk.js"></script>
+  </body>
+</html>

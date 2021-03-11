@@ -61,24 +61,43 @@ namespace AuditREST.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
         ///&lt;html&gt;
         ///&lt;head&gt;
-        ///    &lt;title&gt;&lt;/title&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///Looks how cool is &lt;font size=&quot;x-large&quot;&gt;&lt;b&gt;Open Xml&lt;/b&gt;&lt;/font&gt;.
-        ///Now with &lt;font color=&quot;red&quot;&gt;&lt;u&gt;HtmlToOpenXml&lt;/u&gt;&lt;/font&gt;, it nevers been so easy to convert html.
-        ///&lt;p&gt;
-        ///    If you like it, add me a rating on &lt;a href=&quot;https://github.com/onizet/html2openxml&quot;&gt;github&lt;/a&gt;
-        ///&lt;/p&gt;
-        ///&lt;hr&gt;
-        ///&lt;/body&gt;
-        ///&lt;/html&gt;.
+        ///    &lt;title&gt;Peter Levinsky&lt;/title&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=iso-8859-1&quot;&gt;
+        ///    &lt;meta content=&quot;peterl&quot; name=&quot;Author&quot;&gt;
+        ///    &lt;meta http-equiv=&quot;Cache-Control&quot; content=&quot;max-age=3600&quot;&gt;
+        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css&quot;&gt;
+        ///    &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+        ///    &lt;script sr [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string demo {
             get {
                 return ResourceManager.GetString("demo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html lang=&quot;en&quot;&gt;
+        ///  &lt;head&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot; /&gt;
+        ///    &lt;link rel=&quot;icon&quot; href=&quot;/favicon.ico&quot; /&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; /&gt;
+        ///    &lt;meta name=&quot;theme-color&quot; content=&quot;#000000&quot; /&gt;
+        ///    &lt;meta
+        ///      name=&quot;description&quot;
+        ///      content=&quot;Web site created using create-react-app&quot;
+        ///    /&gt;
+        ///    &lt;link rel=&quot;apple-touch-icon&quot; href=&quot;/logo192.png&quot; /&gt;
+        ///    &lt;!--
+        ///      manifest.json provides metadata used when your web app is installed on a
+        ///      user&apos;s mob [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string rapport {
+            get {
+                return ResourceManager.GetString("rapport", resourceCulture);
             }
         }
     }

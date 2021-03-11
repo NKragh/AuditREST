@@ -209,47 +209,15 @@ namespace AuditREST.DBUtils
             }
         }
 
-        public void GenerateReport(int id)
+        public async void GenerateReport(int id)
         {
             Report report = Get(id);
-
-            List<QuestionAnswer> afvigelser = report.GetResult("Afvigelse");
-            List<QuestionAnswer> observationer = report.GetResult("Observation");
-            List<QuestionAnswer> forbedringer = report.GetResult("Forbedring");
 
             String reportTitle = report.Customer.Name + " - KLS tjekliste og rapport fra intern efterprøvning - " +
                                  report.Completed.ToShortDateString();
 
-            /*
-             * auditor
-             * completed
-             * companyName
-             * cvr
-             * employees
-             * answers
-             */
-
-            string[,] questionAnswers = new string[report.QuestionAnswers.Count + 1, 4];
-
-            questionAnswers[0, 0] = "Answer";
-            questionAnswers[0, 1] = "Remark";
-            questionAnswers[0, 2] = "Comment";
-            questionAnswers[0, 3] = "Reference";
-            for (int i = 0; i < report.QuestionAnswers.Count; i++)
-            {
-                questionAnswers[i + 1, 0] = report.QuestionAnswers[i].Answer;
-                questionAnswers[i + 1, 1] = report.QuestionAnswers[i].Remark;
-                questionAnswers[i + 1, 2] = report.QuestionAnswers[i].Comment;
-                questionAnswers[i + 1, 3] = report.QuestionAnswers[i].QuestionId.ToString();
-            }
-
-            GenerateDocument(reportTitle);
-        }
-
-        public async void GenerateDocument(string filename)
-        {
             //Go to website (get HTML)
-            const string url = "http://pele-easj.dk/";
+            string url = "http://localhost:3000/audit/report/" + id;
             await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
             var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
@@ -257,15 +225,15 @@ namespace AuditREST.DBUtils
             });
             var page = await browser.NewPageAsync();
             await page.GoToAsync(url);
-            
-            //Generate PDF file from HTML
-            await page.PdfAsync("C:/temp/" + filename + ".pdf");
             string html = await page.GetContentAsync();
-            //Debug.WriteLine(html.Length);
+            //string html = Properties.Resources.rapport;
 
-            //string html = Properties.Resources.demo;
+            //Generate PDF file from HTML
+            await page.PdfAsync("C:/temp/" + reportTitle + ".pdf");
+            await page.CloseAsync();
+
             //Generate Docx file from HTML
-            string docxname = "C:/temp/" + filename + ".docx";
+            string docxname = "C:/temp/" + reportTitle + ".docx";
             if (File.Exists(docxname)) File.Delete(docxname);
             using (MemoryStream generatedDocument = new MemoryStream())
             {
@@ -287,6 +255,11 @@ namespace AuditREST.DBUtils
 
                 File.WriteAllBytes(docxname, generatedDocument.ToArray());
             }
+        }
+
+        public void Dropbox()
+        {
+
         }
     }
 }

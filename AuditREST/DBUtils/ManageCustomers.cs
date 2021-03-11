@@ -11,7 +11,8 @@ namespace AuditREST.DBUtils
     {
         private string GET_ALL = "SELECT * FROM Customers";
         private string GET_ONE = "SELECT * FROM Customers WHERE CVR = @CVR";
-        private string INSERT = "INSERT INTO Customers(CVR, Name, Email, Phone) VALUES (@CVR, @Name, @Email, @Phone)";
+        private string GET_BY_AUDITOR = "SELECT * FROM Customers WHERE POC = @Id";
+        private string INSERT = "INSERT INTO Customers(CVR, Name, Email, Phone, POC) VALUES (@CVR, @Name, @Email, @Phone, @POC)";
         public override string ConnectionString { get; set; }
         public override Customer ReadNextElement(SqlDataReader reader)
         {
@@ -21,6 +22,7 @@ namespace AuditREST.DBUtils
             if (!reader.IsDBNull(1)) { customer.Name = reader.GetString(1); }
             if (!reader.IsDBNull(2)) { customer.Email = reader.GetString(2); }
             if (!reader.IsDBNull(3)) { customer.Phone = reader.GetString(3); }
+            if (!reader.IsDBNull(4)) { customer.POC = reader.GetInt32(4); }
 
             return customer;
         }
@@ -78,10 +80,33 @@ namespace AuditREST.DBUtils
                 cmd.Parameters.AddWithValue("@Name", customer.Name);
                 cmd.Parameters.AddWithValue("@Email", customer.Email);
                 cmd.Parameters.AddWithValue("@Phone", customer.Phone);
+                cmd.Parameters.AddWithValue("@POC", customer.POC);
 
                 //Returns true if query returns higher than 0 (affected rows)
                 return cmd.ExecuteNonQuery() > 0;
             }
+        }
+
+        public IEnumerable<Customer> GetByAuditor(int id)
+        {
+            List<Customer> l = new List<Customer>();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(GET_BY_AUDITOR, conn))
+            {
+                conn.Open();
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Customer item = ReadNextElement(reader);
+                    l.Add(item);
+                }
+                reader.Close();
+            }
+
+            return l;
         }
     }
 }

@@ -12,6 +12,8 @@ namespace AuditREST.DBUtils
                                        "JOIN Auditors as a ON a.AuditorId = r.AuditorId " +
                                        "WHERE r.ReportId = @ReportId";
 
+        private string GET_BY_EMAIL = "SELECT * FROM Auditors WHERE AuditorEmail = @Email";
+
         public override string ConnectionString { get; set; }
 
         public override Auditor ReadNextElement(SqlDataReader reader)
@@ -67,22 +69,30 @@ namespace AuditREST.DBUtils
             return auditor;
         }
 
-        //public bool Post(CVR customer)
-        //{
-        //    using (SqlConnection conn = new SqlConnection(ConnectionString))
-        //    using (SqlCommand cmd = new SqlCommand(INSERT, conn))
-        //    {
-        //        conn.Open();
 
-        //        cmd.Parameters.AddWithValue("@CVR", customer.CVR);
-        //        cmd.Parameters.AddWithValue("@Name", customer.Name);
-        //        cmd.Parameters.AddWithValue("@Email", customer.Email);
-        //        cmd.Parameters.AddWithValue("@Phone", customer.Phone);
+        public Auditor GetByEmail(string email)
+        {
+            Auditor auditor = new Auditor();
 
-        //        //Returns true if query returns higher than 0 (affected rows)
-        //        return cmd.ExecuteNonQuery() > 0;
-        //    }
-        //}
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(GET_BY_EMAIL, conn))
+            {
+                conn.Open();
+
+                cmd.Parameters.AddWithValue("@Email", email);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    auditor = ReadNextElement(reader);
+                }
+
+                reader.Close();
+            }
+
+            return auditor;
+        }
+
         public Auditor GetByReport(int reportId)
         {
             Auditor auditor = new Auditor();

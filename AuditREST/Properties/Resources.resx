@@ -121,4 +121,7 @@
   <data name="demo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Models\demo.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="rapport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Models\rapport.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>
