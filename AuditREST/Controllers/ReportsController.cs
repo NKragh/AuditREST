@@ -30,7 +30,7 @@ namespace AuditREST.Controllers
         
         // GET: api/Reports/report/5
         [HttpGet("report/{id}")]
-        public void GeneratReport(int id)
+        public void GenerateReport(int id)
         {
             manager.GenerateReport(id);
         }
